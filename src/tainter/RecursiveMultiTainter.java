@@ -32,14 +32,7 @@ public class RecursiveMultiTainter {
 		return type;
 	}
 
-	private boolean checkArrayDimension(Object obj) {
-		// Returns true if the dimension is greater than one, otherwise, false
-		boolean dimension = false;
-		if ((obj.getClass().getName()).lastIndexOf("[") > 0)
-			dimension = true;
-		return dimension;
-	}
-
+	
 	private void taintPrimitiveArray1D(Object obj, Taint<String> taint)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
@@ -61,6 +54,12 @@ public class RecursiveMultiTainter {
 		} else if (obj.getClass().getComponentType().getTypeName() == byte.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedByteArray((byte[]) obj, taint);
+		} else if (obj.getClass().getComponentType().getTypeName() == char.class
+				.getTypeName()) {
+			obj = MultiTainter.taintedCharArray((char[]) obj, taint);
+		} else if (obj.getClass().getComponentType().getTypeName() == float.class
+				.getTypeName()) {
+			obj = MultiTainter.taintedFloatArray((float[]) obj, taint);
 		} else if (obj.getClass().getComponentType().getTypeName() == void.class
 				.getTypeName()) {
 			System.out.println("Skipping Void type");
@@ -147,16 +146,14 @@ public class RecursiveMultiTainter {
 	public void taintObjects(Object obj, Taint<String> taint)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		// Checking if the obj is an array
+		
+		if (obj == null)
+			throw new NullPointerException("Object can not be null");
+			// Checking if the obj is an array
 		if (obj.getClass().isArray()) {
 			boolean isPrimitive = this.checkArrayType(obj);
-			boolean isGreaterThanOneDimension = this.checkArrayDimension(obj);
-			// obj is 1-D array of primitive types
-			// This is temporary due to an error in phosphor
-			if (isPrimitive && !isGreaterThanOneDimension)
-				this.taintPrimitiveArray1D(obj, taint);
-			// obj i N-D array of primitive types, where N > 1
-			else if (isPrimitive && isGreaterThanOneDimension)
+			// obj is an array of primitive types
+			if (isPrimitive)
 				this.taintPrimitiveArray(obj, taint);
 			// obj is an array of custom types
 			else
