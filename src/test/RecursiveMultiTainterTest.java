@@ -117,7 +117,7 @@ public class RecursiveMultiTainterTest {
 			R.taintObjects(arr_i, new Taint<String>("tainted_recursive"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println(e);
+			assertTrue(e instanceof NullPointerException);
 		}
 		
 	}
