@@ -20,7 +20,15 @@ public class RecursiveMultiTainter {
 		System.out
 				.println("Recursive Multitainter is not suited for Primitive types");
 	}
-
+	
+	private boolean checkArrayDimension(Object obj){
+		// Returns true if the dimension is greater than one, otherwise, false
+		boolean dimension =  false;
+		if ((obj.getClass().getName()).lastIndexOf("[") > 0)
+			dimension = true;
+		return dimension;
+	}
+	
 	private boolean checkArrayType(Object obj) {
 		// Returns false is array is collection of non primitive types, and true
 		// for primitive types
@@ -112,7 +120,7 @@ public class RecursiveMultiTainter {
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
 		for (int i = 0; i < Array.getLength(obj); i++)
-			this.taintCustomObject(Array.get(obj, i), taint);
+			this.taintObjects(Array.get(obj, i), taint);
 	}
 
 	private void taintCustomObject(Object obj, Taint<String> taint)
@@ -159,9 +167,12 @@ public class RecursiveMultiTainter {
 						throw new Exception("Primitive Type Decoding Error");
 					}
 				} else if ((f.get(obj)).getClass().isArray()
-						&& this.checkArrayType(f.get(obj)))
+						&& this.checkArrayType(f.get(obj)) && !this.checkArrayDimension(f.get(obj)))
 					f.set(obj,
 							this.taintPrimitiveArrayWreturn(f.get(obj), taint));
+				else if ((f.get(obj)).getClass().isArray()
+						&& this.checkArrayType(f.get(obj)) && this.checkArrayDimension(f.get(obj)))
+							this.taintPrimitiveArray(f.get(obj), taint);
 				else
 					this.taintObjects(f.get(obj), taint);
 			} else

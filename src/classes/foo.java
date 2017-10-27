@@ -52,6 +52,6 @@ public class foo {
 	}
 	
 	public static class myStruct_ref_array2D{
-		public myStruct_ref2D[] m3 = {new myStruct_ref2D(), new myStruct_ref2D()};
+		public myStruct_ref2D[][] m3 = {{new myStruct_ref2D()}, {new myStruct_ref2D()}};
 	}
 }
