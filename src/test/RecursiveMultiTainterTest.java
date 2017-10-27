@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import classes.foo.myStruct;
 import classes.foo.myStruct_arr;
+import classes.foo.myStruct_arr2D;
+import classes.foo.myStruct_ref;
+import classes.foo.myStruct_ref_array;
 import tainter.RecursiveMultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
@@ -119,6 +122,153 @@ public class RecursiveMultiTainterTest {
 			// TODO Auto-generated catch block
 			assertTrue(e instanceof NullPointerException);
 		}
+		
+	}
+	
+	@Test
+	public void CustomObjectTAintedRescursive() throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception{
+		myStruct m = new myStruct();
+		RecursiveMultiTainter R = new RecursiveMultiTainter();
+		R.taintObjects(m, new Taint<String>("tainted_recursive"));
+		
+		assertNotNull(MultiTainter.getTaint(m));
+		assertNotNull(MultiTainter.getTaint(m.i));
+		assertNotNull(MultiTainter.getTaint(m.b));
+		assertNotNull(MultiTainter.getTaint(m.c));
+		assertNotNull(MultiTainter.getTaint(m.d));
+		assertNotNull(MultiTainter.getTaint(m.j));
+		assertNotNull(MultiTainter.getTaint(m.s));
+		assertNotNull(MultiTainter.getTaint(m.z));
+		assertNotNull(MultiTainter.getTaint(m.f));
+		
+	}
+	
+	@Test
+	public void CustomObjectTaintedRescursiveWithPrimitiveArrays() throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception{
+		myStruct_arr m = new myStruct_arr();
+		RecursiveMultiTainter R = new RecursiveMultiTainter();
+		R.taintObjects(m, new Taint<String>("tainted_recursive"));
+		
+		assertNotNull(MultiTainter.getTaint(m));
+		assertNotNull(MultiTainter.getTaint(m.arr_i[0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_b[0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_c[0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_d[0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_j[0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_s[0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_z[0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_f[0]));
+	}
+	
+	
+	@Test
+	public void CustomObjectTaintedRescursiveWithPrimitiveArrays2D() throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception{
+		myStruct_arr2D m = new myStruct_arr2D();
+		RecursiveMultiTainter R = new RecursiveMultiTainter();
+		R.taintObjects(m, new Taint<String>("tainted_recursive"));
+		
+		assertNotNull(MultiTainter.getTaint(m));
+		assertNotNull(MultiTainter.getTaint(m.arr_i[0][0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_b[0][0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_c[0][0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_d[0][0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_j[0][0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_s[0][0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_z[0][0]));
+		assertNotNull(MultiTainter.getTaint(m.arr_f[0][0]));
+	}
+	
+	
+	@Test
+	public void CustomObjectTaintedRecursiveWithReferences() throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception{
+		myStruct_ref m = new myStruct_ref();
+		RecursiveMultiTainter R = new RecursiveMultiTainter();
+		R.taintObjects(m, new Taint<String>("tainted_recursive"));
+		
+		assertNotNull(MultiTainter.getTaint(m));
+		
+		assertNotNull(MultiTainter.getTaint(m.m1));
+		assertNotNull(MultiTainter.getTaint(m.m1.i));
+		assertNotNull(MultiTainter.getTaint(m.m1.b));
+		assertNotNull(MultiTainter.getTaint(m.m1.c));
+		assertNotNull(MultiTainter.getTaint(m.m1.d));
+		assertNotNull(MultiTainter.getTaint(m.m1.j));
+		assertNotNull(MultiTainter.getTaint(m.m1.s));
+		assertNotNull(MultiTainter.getTaint(m.m1.z));
+		assertNotNull(MultiTainter.getTaint(m.m1.f));
+		
+		assertNotNull(MultiTainter.getTaint(m.m2));
+		assertNotNull(MultiTainter.getTaint(m.m2.arr_i[0]));
+		assertNotNull(MultiTainter.getTaint(m.m2.arr_b[0]));
+		assertNotNull(MultiTainter.getTaint(m.m2.arr_c[0]));
+		assertNotNull(MultiTainter.getTaint(m.m2.arr_d[0]));
+		assertNotNull(MultiTainter.getTaint(m.m2.arr_j[0]));
+		assertNotNull(MultiTainter.getTaint(m.m2.arr_s[0]));
+		assertNotNull(MultiTainter.getTaint(m.m2.arr_z[0]));
+		assertNotNull(MultiTainter.getTaint(m.m2.arr_f[0]));
+		
+	}
+	
+	@Test
+	public void CustomObjectArrayTaintedRecursive() throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception{
+		myStruct_ref[] m = {new myStruct_ref(), new myStruct_ref()};
+		
+		RecursiveMultiTainter R = new RecursiveMultiTainter();
+		R.taintObjects(m, new Taint<String>("tainted_recursive"));
+		
+		assertNotNull(MultiTainter.getTaint(m[0]));
+		assertNotNull(MultiTainter.getTaint(m[0].m1));
+		assertNotNull(MultiTainter.getTaint(m[0].m1.i));
+		assertNotNull(MultiTainter.getTaint(m[0].m1.b));
+		assertNotNull(MultiTainter.getTaint(m[0].m1.c));
+		assertNotNull(MultiTainter.getTaint(m[0].m1.d));
+		assertNotNull(MultiTainter.getTaint(m[0].m1.j));
+		assertNotNull(MultiTainter.getTaint(m[0].m1.s));
+		assertNotNull(MultiTainter.getTaint(m[0].m1.z));
+		assertNotNull(MultiTainter.getTaint(m[0].m1.f));
+		
+		assertNotNull(MultiTainter.getTaint(m[1]));
+		assertNotNull(MultiTainter.getTaint(m[1].m2));
+		assertNotNull(MultiTainter.getTaint(m[1].m2.arr_i[0]));
+		assertNotNull(MultiTainter.getTaint(m[1].m2.arr_b[0]));
+		assertNotNull(MultiTainter.getTaint(m[1].m2.arr_c[0]));
+		assertNotNull(MultiTainter.getTaint(m[1].m2.arr_d[0]));
+		assertNotNull(MultiTainter.getTaint(m[1].m2.arr_j[0]));
+		assertNotNull(MultiTainter.getTaint(m[1].m2.arr_s[0]));
+		assertNotNull(MultiTainter.getTaint(m[1].m2.arr_z[0]));
+		assertNotNull(MultiTainter.getTaint(m[1].m2.arr_f[0]));
+		
+	}
+	
+	@Test
+	public void CustomObjectTaintedRecursiveWithReferenceArrays() throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception{
+		myStruct_ref_array m = new myStruct_ref_array();
+		RecursiveMultiTainter R = new RecursiveMultiTainter();
+		R.taintObjects(m, new Taint<String>("tainted_recursive"));
+		
+		assertNotNull(MultiTainter.getTaint(m));
+		
+		assertNotNull(MultiTainter.getTaint(m.m3[0]));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1.i));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1.b));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1.c));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1.d));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1.j));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1.s));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1.z));
+		assertNotNull(MultiTainter.getTaint(m.m3[0].m1.f));
+		
+		assertNotNull(MultiTainter.getTaint(m.m3[1]));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2.arr_i[0]));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2.arr_b[0]));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2.arr_c[0]));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2.arr_d[0]));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2.arr_j[0]));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2.arr_s[0]));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2.arr_z[0]));
+		assertNotNull(MultiTainter.getTaint(m.m3[1].m2.arr_f[0]));
 		
 	}
 }

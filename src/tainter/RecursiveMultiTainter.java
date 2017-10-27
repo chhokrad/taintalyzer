@@ -27,12 +27,12 @@ public class RecursiveMultiTainter {
 		String oracle = new String("IJZSDBCF");
 		boolean type = false;
 		String type_str = obj.getClass().getName();
-		if ((type_str.length() - type_str.lastIndexOf("[")) == 2 && oracle.contains(type_str.substring(type_str.length() - 1)))
+		if ((type_str.length() - type_str.lastIndexOf("[")) == 2
+				&& oracle.contains(type_str.substring(type_str.length() - 1)))
 			type = true;
 		return type;
 	}
 
-	
 	private void taintPrimitiveArray1D(Object obj, Taint<String> taint)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
@@ -88,68 +88,96 @@ public class RecursiveMultiTainter {
 
 	}
 
-	private void taintCustomArray(Object obj, Taint<String> taint) {
-
+	private Object taintPrimitiveArrayWreturn(Object obj, Taint<String> taint)
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
+			Exception {
+		Queue<Object> myqueue = new LinkedList<Object>();
+		myqueue.add(obj);
+		while (!myqueue.isEmpty()) {
+			Object obj_ = new Object();
+			obj_ = myqueue.poll();
+			if (ClassUtils.isPrimitiveOrWrapper(obj_.getClass()
+					.getComponentType())) {
+				this.taintPrimitiveArray1D(obj_, taint);
+			} else {
+				int length = Array.getLength(obj_);
+				for (int index = 0; index < length; index++)
+					myqueue.add(Array.get(obj_, index));
+			}
+		}
+		return obj;
 	}
 
-	private void taintCustomObject(Object obj, Taint<String> taint) throws Exception {
+	private void taintCustomArray(Object obj, Taint<String> taint)
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
+			Exception {
+		for (int i = 0; i < Array.getLength(obj); i++)
+			this.taintCustomObject(Array.get(obj, i), taint);
+	}
+
+	private void taintCustomObject(Object obj, Taint<String> taint)
+			throws Exception {
 		MultiTainter.taintedObject(obj, taint);
 		for (Field f : obj.getClass().getDeclaredFields()) {
-			if (f.getType().isPrimitive()
-					&& !Modifier.isFinal(f.getModifiers())) {
-				if (f.getType() == int.class) {
-					f.setInt(
-							obj,
-							MultiTainter.taintedInt(f.getInt(obj),
-									taint.getLabel()));
-				} else if (f.getType() == long.class) {
-					f.setLong(
-							obj,
-							MultiTainter.taintedLong(f.getLong(obj),
-									taint.getLabel()));
-				} else if (f.getType() == boolean.class) {
-					f.setBoolean(obj, MultiTainter.taintedBoolean(
-							f.getBoolean(obj), taint.getLabel()));
-				} else if (f.getType() == short.class) {
-					f.setShort(
-							obj,
-							MultiTainter.taintedShort(f.getShort(obj),
-									taint.getLabel()));
-				} else if (f.getType() == double.class) {
-					f.setDouble(
-							obj,
-							MultiTainter.taintedDouble(f.getDouble(obj),
-									taint.getLabel()));
-				} else if (f.getType() == byte.class) {
-					f.setByte(
-							obj,
-							MultiTainter.taintedByte(f.getByte(obj),
-									taint.getLabel()));
-				} else if (f.getType() == char.class) {
-					f.setChar(
-							obj,
-							MultiTainter.taintedChar(f.getChar(obj),
-									taint.getLabel()));
-				} else if (f.getType() == void.class) {
-					System.out.println("Skipping void");
-				} else {
-					throw new Exception("Primitive Type Decoding Error");
-				}
-			} else if (!f.getType().isArray()) {
-				
-				System.out.println("Reached Here");
-
-			}
+			if (!Modifier.isFinal(f.getModifiers())) {
+				if (ClassUtils.isPrimitiveOrWrapper(f.getType())) {
+					if (f.getType() == int.class) {
+						f.setInt(
+								obj,
+								MultiTainter.taintedInt(f.getInt(obj),
+										taint.getLabel()));
+					} else if (f.getType() == long.class) {
+						f.setLong(
+								obj,
+								MultiTainter.taintedLong(f.getLong(obj),
+										taint.getLabel()));
+					} else if (f.getType() == boolean.class) {
+						f.setBoolean(obj, MultiTainter.taintedBoolean(
+								f.getBoolean(obj), taint.getLabel()));
+					} else if (f.getType() == short.class) {
+						f.setShort(obj, MultiTainter.taintedShort(
+								f.getShort(obj), taint.getLabel()));
+					} else if (f.getType() == double.class) {
+						f.setDouble(obj, MultiTainter.taintedDouble(
+								f.getDouble(obj), taint.getLabel()));
+					} else if (f.getType() == byte.class) {
+						f.setByte(
+								obj,
+								MultiTainter.taintedByte(f.getByte(obj),
+										taint.getLabel()));
+					} else if (f.getType() == char.class) {
+						f.setChar(
+								obj,
+								MultiTainter.taintedChar(f.getChar(obj),
+										taint.getLabel()));
+					} else if (f.getType() == float.class) {
+						f.setFloat(obj, MultiTainter.taintedFloat(
+								f.getFloat(obj), taint.getLabel()));
+					} else if (f.getType() == void.class) {
+						System.out.println("Skipping void");
+					} else {
+						throw new Exception("Primitive Type Decoding Error");
+					}
+				} else if ((f.get(obj)).getClass().isArray()
+						&& this.checkArrayType(f.get(obj)))
+					f.set(obj,
+							this.taintPrimitiveArrayWreturn(f.get(obj), taint));
+				else
+					this.taintObjects(f.get(obj), taint);
+			} else
+				System.out.println("Skipping tainting a Final Field : "
+						+ f.getType() + " " + f.getName() + " in "
+						+ obj.getClass().getName());
 		}
 	}
 
 	public void taintObjects(Object obj, Taint<String> taint)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		
+
 		if (obj == null)
 			throw new NullPointerException("Object can not be null");
-			// Checking if the obj is an array
+		// Checking if the obj is an array
 		if (obj.getClass().isArray()) {
 			boolean isPrimitive = this.checkArrayType(obj);
 			// obj is an array of primitive types
@@ -160,7 +188,8 @@ public class RecursiveMultiTainter {
 				this.taintCustomArray(obj, taint);
 			// obj is not an array
 		} else {
-			// obj is a primitive type or a wrapper associated with primitive type
+			// obj is a primitive type or a wrapper associated with primitive
+			// type
 			if (ClassUtils.isPrimitiveOrWrapper(obj.getClass()))
 				this.taintPrimitive(obj, taint);
 			// obj is a reference to custom type
