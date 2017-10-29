@@ -20,15 +20,15 @@ public class RecursiveMultiTainter {
 		System.out
 				.println("Recursive Multitainter is not suited for Primitive types");
 	}
-	
-	private boolean checkArrayDimension(Object obj){
+
+	private boolean checkArrayDimension(Object obj) {
 		// Returns true if the dimension is greater than one, otherwise, false
-		boolean dimension =  false;
+		boolean dimension = false;
 		if ((obj.getClass().getName()).lastIndexOf("[") > 0)
 			dimension = true;
 		return dimension;
 	}
-	
+
 	private boolean checkArrayType(Object obj) {
 		// Returns false is array is collection of non primitive types, and true
 		// for primitive types
@@ -127,45 +127,51 @@ public class RecursiveMultiTainter {
 			throws Exception {
 		MultiTainter.taintedObject(obj, taint);
 		for (Field f : obj.getClass().getDeclaredFields()) {
-			if (!Modifier.isFinal(f.getModifiers())) {
+			f.setAccessible(true);
 				if (ClassUtils.isPrimitiveOrWrapper(f.getType())) {
-					if (f.getType() == int.class) {
-						f.setInt(
-								obj,
-								MultiTainter.taintedInt(f.getInt(obj),
-										taint.getLabel()));
-					} else if (f.getType() == long.class) {
-						f.setLong(
-								obj,
-								MultiTainter.taintedLong(f.getLong(obj),
-										taint.getLabel()));
-					} else if (f.getType() == boolean.class) {
-						f.setBoolean(obj, MultiTainter.taintedBoolean(
-								f.getBoolean(obj), taint.getLabel()));
-					} else if (f.getType() == short.class) {
-						f.setShort(obj, MultiTainter.taintedShort(
-								f.getShort(obj), taint.getLabel()));
-					} else if (f.getType() == double.class) {
-						f.setDouble(obj, MultiTainter.taintedDouble(
-								f.getDouble(obj), taint.getLabel()));
-					} else if (f.getType() == byte.class) {
-						f.setByte(
-								obj,
-								MultiTainter.taintedByte(f.getByte(obj),
-										taint.getLabel()));
-					} else if (f.getType() == char.class) {
-						f.setChar(
-								obj,
-								MultiTainter.taintedChar(f.getChar(obj),
-										taint.getLabel()));
-					} else if (f.getType() == float.class) {
-						f.setFloat(obj, MultiTainter.taintedFloat(
-								f.getFloat(obj), taint.getLabel()));
-					} else if (f.getType() == void.class) {
-						System.out.println("Skipping void");
-					} else {
-						throw new Exception("Primitive Type Decoding Error");
-					}
+					if (!Modifier.isFinal(f.getModifiers())) {
+						if (f.getType() == int.class) {
+							f.setInt(
+									obj,
+									MultiTainter.taintedInt(f.getInt(obj),
+											taint.getLabel()));
+						} else if (f.getType() == long.class) {
+							f.setLong(
+									obj,
+									MultiTainter.taintedLong(f.getLong(obj),
+											taint.getLabel()));
+						} else if (f.getType() == boolean.class) {
+							f.setBoolean(obj, MultiTainter.taintedBoolean(
+									f.getBoolean(obj), taint.getLabel()));
+						} else if (f.getType() == short.class) {
+							f.setShort(obj, MultiTainter.taintedShort(
+									f.getShort(obj), taint.getLabel()));
+						} else if (f.getType() == double.class) {
+							f.setDouble(obj, MultiTainter.taintedDouble(
+									f.getDouble(obj), taint.getLabel()));
+						} else if (f.getType() == byte.class) {
+							f.setByte(
+									obj,
+									MultiTainter.taintedByte(f.getByte(obj),
+											taint.getLabel()));
+						} else if (f.getType() == char.class) {
+							f.setChar(
+									obj,
+									MultiTainter.taintedChar(f.getChar(obj),
+											taint.getLabel()));
+						} else if (f.getType() == float.class) {
+							f.setFloat(obj, MultiTainter.taintedFloat(
+									f.getFloat(obj), taint.getLabel()));
+						} else if (f.getType() == void.class) {
+							System.out.println("Skipping void");
+						} else {
+							throw new Exception("Primitive Type Decoding Error");
+						}
+						}
+					else
+						System.out.println("Skipping tainting a Final Field : "
+								+ f.getType() + " " + f.getName() + " in "
+								+ obj.getClass().getName());
 				} else if ((f.get(obj)).getClass().isArray()
 						&& this.checkArrayType(f.get(obj)) && !this.checkArrayDimension(f.get(obj)))
 					f.set(obj,
@@ -175,11 +181,7 @@ public class RecursiveMultiTainter {
 							this.taintPrimitiveArray(f.get(obj), taint);
 				else
 					this.taintObjects(f.get(obj), taint);
-			} else
-				System.out.println("Skipping tainting a Final Field : "
-						+ f.getType() + " " + f.getName() + " in "
-						+ obj.getClass().getName());
-		}
+			} 
 	}
 
 	public void taintObjects(Object obj, Taint<String> taint)
