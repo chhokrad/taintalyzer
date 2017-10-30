@@ -4,18 +4,16 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 import org.apache.commons.lang3.ClassUtils;
 
-import classes.Pair;
-import classes.PairComparator;
+import classes.myPair;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
 
 public class RecursiveMultiTainterBFS {
-	private Queue<Pair> myQueue = new PriorityQueue<>(new PairComparator());
+	private Queue<myPair> myQueue = new LinkedList<myPair>();
 	private int MAX_LEVEL;
 	private int MAX_TAINTS;
 	private int CurrTaints = 0;
@@ -30,7 +28,7 @@ public class RecursiveMultiTainterBFS {
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
 		this.taint = taint;
-		this.taintObjectsfiltered(new Pair(0, obj));
+		this.taintObjectsfiltered(new myPair(0, obj));
 	}
 
 	public void taintObjects(Object obj, Taint<String> taint, int max_level,
@@ -42,12 +40,12 @@ public class RecursiveMultiTainterBFS {
 		this.taintObjects(obj, taint);
 	}
 
-	private void taintObjectsfiltered(Pair p_)
+	private void taintObjectsfiltered(myPair p_)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
 		myQueue.add(p_);
 		while (!this.myQueue.isEmpty()){
-			Pair p = this.myQueue.poll();
+			myPair p = this.myQueue.poll();
 			if (p.getLevel() <= this.MAX_LEVEL && this.CurrTaints < this.MAX_TAINTS) {
 				Object obj = p.getObj();
 				if (obj == null) {
@@ -164,11 +162,11 @@ public class RecursiveMultiTainterBFS {
 		}
 	}
 	
-	private void taintCustomArrayfiltered(Pair p)
+	private void taintCustomArrayfiltered(myPair p)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
 		for (int i = 0; i < Array.getLength(p.getObj()); i++)
-			this.myQueue.add(new Pair(p.getLevel(), Array.get(p.getObj(), i)));
+			this.myQueue.add(new myPair(p.getLevel(), Array.get(p.getObj(), i)));
 	}
 	
 	
@@ -177,7 +175,7 @@ public class RecursiveMultiTainterBFS {
 				.println("Recursive Multitainter is not suited for Primitive types");
 	}
 	
-	private void taintCustomObjectfiltered(Pair p)
+	private void taintCustomObjectfiltered(myPair p)
 			throws Exception {
 		MultiTainter.taintedObject(p.getObj(), taint);
 		this.CurrTaints++;
@@ -193,33 +191,41 @@ public class RecursiveMultiTainterBFS {
 										obj,
 										MultiTainter.taintedInt(f.getInt(obj),
 												taint.getLabel()));
+								this.CurrTaints++;
 							} else if (f.getType() == long.class) {
 								f.setLong(
 										obj,
 										MultiTainter.taintedLong(f.getLong(obj),
 												taint.getLabel()));
+								this.CurrTaints++;
 							} else if (f.getType() == boolean.class) {
 								f.setBoolean(obj, MultiTainter.taintedBoolean(
 										f.getBoolean(obj), taint.getLabel()));
+								this.CurrTaints++;
 							} else if (f.getType() == short.class) {
 								f.setShort(obj, MultiTainter.taintedShort(
 										f.getShort(obj), taint.getLabel()));
+								this.CurrTaints++;
 							} else if (f.getType() == double.class) {
 								f.setDouble(obj, MultiTainter.taintedDouble(
 										f.getDouble(obj), taint.getLabel()));
+								this.CurrTaints++;
 							} else if (f.getType() == byte.class) {
 								f.setByte(
 										obj,
 										MultiTainter.taintedByte(f.getByte(obj),
 												taint.getLabel()));
+								this.CurrTaints++;
 							} else if (f.getType() == char.class) {
 								f.setChar(
 										obj,
 										MultiTainter.taintedChar(f.getChar(obj),
 												taint.getLabel()));
+								this.CurrTaints++;
 							} else if (f.getType() == float.class) {
 								f.setFloat(obj, MultiTainter.taintedFloat(
 										f.getFloat(obj), taint.getLabel()));
+								this.CurrTaints++;
 							} else if (f.getType() == void.class) {
 								System.out.println("Skipping void");
 							} else {
@@ -238,7 +244,7 @@ public class RecursiveMultiTainterBFS {
 							&& this.isPrimitiveArray(f.get(obj)) && this.isGreaterThanOneDimension(f.get(obj)))
 								this.taintPrimitiveArrayfiltered(f.get(obj));
 					else
-						this.myQueue.add(new Pair(p.getLevel()+1, f.get(obj)));
+						this.myQueue.add(new myPair(p.getLevel()+1, f.get(obj)));
 				}
 		}
 

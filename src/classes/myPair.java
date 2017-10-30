@@ -1,8 +1,8 @@
 package classes;
 
-public class Pair {
+public class myPair {
 	
-	public Pair(int level, Object obj){
+	public myPair(int level, Object obj){
 		this.level = level;
 		this.obj = obj;
 	}

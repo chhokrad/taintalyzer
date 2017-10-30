@@ -39,6 +39,6 @@ public class RecursiveMultiTainterBFSTest {
 			if (Modifier.isFinal(f.getModifiers())) continue;
 			if (getTaintPrimitive(f, ms) != null) counter++;
 		}
-		assertEquals(counter, 3);
+		assertEquals(counter, 2);
 	}
 }
