@@ -4,18 +4,21 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 import org.apache.commons.lang3.ClassUtils;
 
 import classes.Pair;
+import classes.PairComparator;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
 
 public class RecursiveMultiTainterBFS {
-	private Queue<Pair> myQueue = new LinkedList<Pair>();
+	private Queue<Pair> myQueue = new PriorityQueue<>(new PairComparator());
 	private int MAX_LEVEL;
 	private int MAX_TAINTS;
+	private int CurrTaints = 0;
 	private Taint<String> taint;
 
 	public RecursiveMultiTainterBFS(int level, int MAX_TAINTS) {
@@ -45,7 +48,7 @@ public class RecursiveMultiTainterBFS {
 		myQueue.add(p_);
 		while (!this.myQueue.isEmpty()){
 			Pair p = this.myQueue.poll();
-			if (p.getLevel() <= this.MAX_LEVEL) {
+			if (p.getLevel() <= this.MAX_LEVEL && this.CurrTaints < this.MAX_TAINTS) {
 				Object obj = p.getObj();
 				if (obj == null) {
 					System.out.println("Skipping null object");
@@ -124,27 +127,35 @@ public class RecursiveMultiTainterBFS {
 		if (obj.getClass().getComponentType().getTypeName() == int.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedIntArray((int[]) obj, taint);
+			this.CurrTaints++;
 		} else if (obj.getClass().getComponentType().getTypeName() == long.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedLongArray((long[]) obj, taint);
+			this.CurrTaints++;
 		} else if (obj.getClass().getComponentType().getTypeName() == boolean.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedBooleanArray((boolean[]) obj, taint);
+			this.CurrTaints++;
 		} else if (obj.getClass().getComponentType().getTypeName() == short.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedShortArray((short[]) obj, taint);
+			this.CurrTaints++;
 		} else if (obj.getClass().getComponentType().getTypeName() == double.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedDoubleArray((double[]) obj, taint);
+			this.CurrTaints++;
 		} else if (obj.getClass().getComponentType().getTypeName() == byte.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedByteArray((byte[]) obj, taint);
+			this.CurrTaints++;
 		} else if (obj.getClass().getComponentType().getTypeName() == char.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedCharArray((char[]) obj, taint);
+			this.CurrTaints++;
 		} else if (obj.getClass().getComponentType().getTypeName() == float.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedFloatArray((float[]) obj, taint);
+			this.CurrTaints++;
 		} else if (obj.getClass().getComponentType().getTypeName() == void.class
 				.getTypeName()) {
 			System.out.println("Skipping Void type");
@@ -169,9 +180,11 @@ public class RecursiveMultiTainterBFS {
 	private void taintCustomObjectfiltered(Pair p)
 			throws Exception {
 		MultiTainter.taintedObject(p.getObj(), taint);
+		this.CurrTaints++;
 		if (p.getLevel() < this.MAX_LEVEL) {
 			Object obj = p.getObj();
 			for (Field f : obj.getClass().getDeclaredFields()) {
+				if (this.CurrTaints >= this.MAX_TAINTS) break;
 				f.setAccessible(true);
 					if (ClassUtils.isPrimitiveOrWrapper(f.getType())) {
 						if (!Modifier.isFinal(f.getModifiers())) {
