@@ -47,11 +47,12 @@ public class RecursiveMultiTainterBFS {
 			Pair p = this.myQueue.poll();
 			if (p.getLevel() <= this.MAX_LEVEL) {
 				Object obj = p.getObj();
-				if (obj == null)
-					throw new NullPointerException("Object can not be null");
+				if (obj == null) {
+					System.out.println("Skipping null object");
+				}
 				// Checking if the obj is an array
 				if (obj.getClass().isArray()) {
-					boolean isPrimitive = this.checkArrayType(obj);
+					boolean isPrimitive = this.isPrimitiveArray(obj);
 					// obj is an array of primitive types
 					if (isPrimitive)
 						this.taintPrimitiveArrayfiltered(obj);
@@ -76,7 +77,7 @@ public class RecursiveMultiTainterBFS {
 
 	}
 	
-	private boolean checkArrayDimension(Object obj) {
+	private boolean isGreaterThanOneDimension(Object obj) {
 		// Returns true if the dimension is greater than one, otherwise, false
 		boolean dimension = false;
 		if ((obj.getClass().getName()).lastIndexOf("[") > 0)
@@ -84,7 +85,7 @@ public class RecursiveMultiTainterBFS {
 		return dimension;
 	}
 
-	private boolean checkArrayType(Object obj) {
+	private boolean isPrimitiveArray(Object obj) {
 		// Returns false is array is collection of non primitive types, and true
 		// for primitive types
 		String oracle = new String("IJZSDBCF");
@@ -168,8 +169,7 @@ public class RecursiveMultiTainterBFS {
 	private void taintCustomObjectfiltered(Pair p)
 			throws Exception {
 		MultiTainter.taintedObject(p.getObj(), taint);
-		if (p.getLevel() < this.MAX_LEVEL)
-		{
+		if (p.getLevel() < this.MAX_LEVEL) {
 			Object obj = p.getObj();
 			for (Field f : obj.getClass().getDeclaredFields()) {
 				f.setAccessible(true);
@@ -212,23 +212,23 @@ public class RecursiveMultiTainterBFS {
 							} else {
 								throw new Exception("Primitive Type Decoding Error");
 							}
-							}
+						}
 						else
 							System.out.println("Skipping tainting a Final Field : "
 									+ f.getType() + " " + f.getName() + " in "
 									+ obj.getClass().getName());
 					} else if ((f.get(obj)).getClass().isArray()
-							&& this.checkArrayType(f.get(obj)) && !this.checkArrayDimension(f.get(obj)))
+							&& this.isPrimitiveArray(f.get(obj)) && !this.isGreaterThanOneDimension(f.get(obj)))
 						f.set(obj,
 								this.taintPrimitiveArrayWreturnfiltered(f.get(obj)));
 					else if ((f.get(obj)).getClass().isArray()
-							&& this.checkArrayType(f.get(obj)) && this.checkArrayDimension(f.get(obj)))
+							&& this.isPrimitiveArray(f.get(obj)) && this.isGreaterThanOneDimension(f.get(obj)))
 								this.taintPrimitiveArrayfiltered(f.get(obj));
 					else
-						this.taintObjectsfiltered(new Pair(p.getLevel()+1, f.get(obj)));
+						this.myQueue.add(new Pair(p.getLevel()+1, f.get(obj)));
 				}
 		}
-		 
+
 	}
 	
 	private Object taintPrimitiveArrayWreturnfiltered(Object obj)

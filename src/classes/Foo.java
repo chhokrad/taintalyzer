@@ -1,8 +1,8 @@
 package classes;
 
-public class foo {
+public class Foo {
 	
-	public static class myStruct{
+	public static class MyStruct {
 		public int i = 10;
 		public long j = 10;
 		public boolean z = false;
@@ -13,7 +13,7 @@ public class foo {
 		public float f = 34;
 	}
 	
-	public static class myStruct_final{
+	public static class myStruct_final {
 		final public int i = 10;
 		final public long j = 10;
 		final public boolean z = false;
@@ -48,7 +48,7 @@ public class foo {
 	
 	
 	public static class myStruct_ref{
-		public myStruct m1 = new myStruct();
+		public MyStruct m1 = new MyStruct();
 		public myStruct_arr m2 = new myStruct_arr();
 	}
 	
@@ -89,7 +89,7 @@ public class foo {
 	}
 	
 	public static class myStruct_ref2D{
-		public myStruct m1 = new myStruct();
+		public MyStruct m1 = new MyStruct();
 		public myStruct_arr2D m2 = new myStruct_arr2D();
 	}
 	

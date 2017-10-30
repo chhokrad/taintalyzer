@@ -5,20 +5,20 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import classes.AnotherStruct;
-import classes.foo.myStruct;
-import classes.foo.myStruct_arr;
-import classes.foo.myStruct_arr2D;
-import classes.foo.myStruct_arr2D_final;
-import classes.foo.myStruct_arr_final;
-import classes.foo.myStruct_final;
-import classes.foo.myStruct_ref;
-import classes.foo.myStruct_ref2D;
-import classes.foo.myStruct_ref2D_final;
-import classes.foo.myStruct_ref_array;
-import classes.foo.myStruct_ref_array2D;
-import classes.foo.myStruct_ref_array2D_final;
-import classes.foo.myStruct_ref_array_final;
-import classes.foo.myStruct_ref_final;
+import classes.Foo.MyStruct;
+import classes.Foo.myStruct_arr;
+import classes.Foo.myStruct_arr2D;
+import classes.Foo.myStruct_arr2D_final;
+import classes.Foo.myStruct_arr_final;
+import classes.Foo.myStruct_final;
+import classes.Foo.myStruct_ref;
+import classes.Foo.myStruct_ref2D;
+import classes.Foo.myStruct_ref2D_final;
+import classes.Foo.myStruct_ref_array;
+import classes.Foo.myStruct_ref_array2D;
+import classes.Foo.myStruct_ref_array2D_final;
+import classes.Foo.myStruct_ref_array_final;
+import classes.Foo.myStruct_ref_final;
 import tainter.RecursiveMultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
@@ -138,7 +138,7 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectTAintedRescursive()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct m = new myStruct();
+		MyStruct m = new MyStruct();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
