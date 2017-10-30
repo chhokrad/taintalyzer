@@ -2,13 +2,18 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.LinkedList;
+import java.util.Queue;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.junit.Test;
 
 import tainter.RecursiveMultiTainterBFS;
 import classes.Foo.MyStruct;
+import classes.Foo.myStruct_arr;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
 
@@ -29,16 +34,75 @@ public class RecursiveMultiTainterBFSTest {
 		}
 	}
 	
+	public int getArrayTaints(Object obj)
+	{
+		int numTaints = 0;
+		
+		Queue<Object> myqueue = new LinkedList<Object>();
+		myqueue.add(obj);
+		while (!myqueue.isEmpty()) {
+			Object obj_ = new Object();
+			obj_ = myqueue.poll();
+			if (ClassUtils.isPrimitiveOrWrapper(obj_.getClass()
+					.getComponentType())) {
+				numTaints += getArrayTaints1D(obj_); 
+			} else {
+				int length = Array.getLength(obj_);
+				for (int index = 0; index < length; index++)
+					myqueue.add(Array.get(obj_, index));
+			}
+		}
+		return numTaints;
+	}
+		
+	private int getArrayTaints1D(Object obj_) {
+		// TODO Auto-generated method stub
+		int numTaints = 0;
+		int length = Array.getLength(obj_);
+		for (int index = 0; index < length; index++)
+		{
+			System.out.println(obj_.getClass().getComponentType().getName());
+			System.out.println(Array.get(obj_, index));
+			System.out.println(MultiTainter.getTaint(Array.get(obj_, index)));
+			//if (MultiTainter.getTaint(Array.get(obj_, index)) != null) numTaints++;
+		}
+			
+		return numTaints;
+	}
+
+	
 	@Test
 	public void simpleMaxTaint() throws Exception {
 		MyStruct ms = new MyStruct();
 		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 3);
-		rtbfs.taintObjects(ms, new Taint<String>("simple"));
+		rtbfs.taintObjects(ms, new Taint<String>("tainted_recursive"));
 		int counter = 0;		
 		for (Field f : ms.getClass().getDeclaredFields()) {
 			if (Modifier.isFinal(f.getModifiers())) continue;
 			if (getTaintPrimitive(f, ms) != null) counter++;
 		}
 		assertEquals(counter, 2);
+	}
+	
+	
+	@Test
+	public void simpleMaxTaintArray() throws Exception {
+		myStruct_arr ms = new myStruct_arr();
+		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 4);
+		rtbfs.taintObjects(ms, new Taint<String>("simple"));
+		int counter = 0;	
+		if (MultiTainter.getTaint(ms) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_i[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_i[1]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_i[2]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_b[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_c[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_d[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_f[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_j[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_s[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_z[0]) != null) counter++;
+		assertEquals(counter, 4);
+		
 	}
 }

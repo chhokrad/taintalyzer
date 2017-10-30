@@ -75,7 +75,6 @@ public class RecursiveMultiTainterBFS {
 			}
 		}
 		
-
 	}
 	
 	private boolean isGreaterThanOneDimension(Object obj) {
@@ -125,35 +124,35 @@ public class RecursiveMultiTainterBFS {
 		if (obj.getClass().getComponentType().getTypeName() == int.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedIntArray((int[]) obj, taint);
-			this.CurrTaints++;
+			this.CurrTaints+= Array.getLength(obj);
 		} else if (obj.getClass().getComponentType().getTypeName() == long.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedLongArray((long[]) obj, taint);
-			this.CurrTaints++;
+			this.CurrTaints+= Array.getLength(obj);
 		} else if (obj.getClass().getComponentType().getTypeName() == boolean.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedBooleanArray((boolean[]) obj, taint);
-			this.CurrTaints++;
+			this.CurrTaints+= Array.getLength(obj);
 		} else if (obj.getClass().getComponentType().getTypeName() == short.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedShortArray((short[]) obj, taint);
-			this.CurrTaints++;
+			this.CurrTaints+= Array.getLength(obj);
 		} else if (obj.getClass().getComponentType().getTypeName() == double.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedDoubleArray((double[]) obj, taint);
-			this.CurrTaints++;
+			this.CurrTaints+= Array.getLength(obj);
 		} else if (obj.getClass().getComponentType().getTypeName() == byte.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedByteArray((byte[]) obj, taint);
-			this.CurrTaints++;
+			this.CurrTaints+= Array.getLength(obj);
 		} else if (obj.getClass().getComponentType().getTypeName() == char.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedCharArray((char[]) obj, taint);
-			this.CurrTaints++;
+			this.CurrTaints+= Array.getLength(obj);
 		} else if (obj.getClass().getComponentType().getTypeName() == float.class
 				.getTypeName()) {
 			obj = MultiTainter.taintedFloatArray((float[]) obj, taint);
-			this.CurrTaints++;
+			this.CurrTaints+= Array.getLength(obj);
 		} else if (obj.getClass().getComponentType().getTypeName() == void.class
 				.getTypeName()) {
 			System.out.println("Skipping Void type");
