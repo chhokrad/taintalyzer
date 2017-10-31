@@ -6,19 +6,19 @@ import org.junit.Test;
 
 import classes.AnotherStruct;
 import classes.Foo.MyStruct;
-import classes.Foo.myStruct_arr;
-import classes.Foo.myStruct_arr2D;
-import classes.Foo.myStruct_arr2D_final;
-import classes.Foo.myStruct_arr_final;
-import classes.Foo.myStruct_final;
-import classes.Foo.myStruct_ref;
-import classes.Foo.myStruct_ref2D;
-import classes.Foo.myStruct_ref2D_final;
-import classes.Foo.myStruct_ref_array;
-import classes.Foo.myStruct_ref_array2D;
-import classes.Foo.myStruct_ref_array2D_final;
-import classes.Foo.myStruct_ref_array_final;
-import classes.Foo.myStruct_ref_final;
+import classes.Foo.MyStruct_arr;
+import classes.Foo.MyStruct_arr2D;
+import classes.Foo.MyStruct_arr2D_final;
+import classes.Foo.MyStruct_arr_final;
+import classes.Foo.MyStruct_final;
+import classes.Foo.MyStruct_ref;
+import classes.Foo.MyStruct_ref2D;
+import classes.Foo.MyStruct_ref2D_final;
+import classes.Foo.MyStruct_ref_array;
+import classes.Foo.MyStruct_ref_array2D;
+import classes.Foo.MyStruct_ref_array2D_final;
+import classes.Foo.MyStruct_ref_array_final;
+import classes.Foo.MyStruct_ref_final;
 import tainter.RecursiveMultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
@@ -158,7 +158,7 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectTaintedRescursiveWithPrimitiveArrays()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct_arr m = new myStruct_arr();
+		MyStruct_arr m = new MyStruct_arr();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -177,7 +177,7 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectTaintedRescursiveWithPrimitiveArrays2D()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct_arr2D m = new myStruct_arr2D();
+		MyStruct_arr2D m = new MyStruct_arr2D();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -196,7 +196,7 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectTaintedRecursiveWithReferences()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct_ref m = new myStruct_ref();
+		MyStruct_ref m = new MyStruct_ref();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -228,7 +228,7 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectTaintedRecursiveWithReferences2D()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct_ref2D m = new myStruct_ref2D();
+		MyStruct_ref2D m = new MyStruct_ref2D();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -260,7 +260,7 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectArrayTaintedRecursive()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct_ref[] m = { new myStruct_ref(), new myStruct_ref() };
+		MyStruct_ref[] m = { new MyStruct_ref(), new MyStruct_ref() };
 
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
@@ -293,8 +293,8 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectArrayTaintedRecursive2D()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct_ref2D[][] m = { { new myStruct_ref2D() },
-				{ new myStruct_ref2D() } };
+		MyStruct_ref2D[][] m = { { new MyStruct_ref2D() },
+				{ new MyStruct_ref2D() } };
 
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
@@ -327,7 +327,7 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectTaintedRecursiveWithReferenceArrays()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct_ref_array m = new myStruct_ref_array();
+		MyStruct_ref_array m = new MyStruct_ref_array();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -361,7 +361,7 @@ public class RecursiveMultiTainterTest {
 	public void CustomObjectTaintedRecursiveWithReferenceArrays2D()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
-		myStruct_ref_array2D m = new myStruct_ref_array2D();
+		MyStruct_ref_array2D m = new MyStruct_ref_array2D();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -526,7 +526,7 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectTAintedRescursiveFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			final myStruct_final m = new myStruct_final();
+			final MyStruct_final m = new MyStruct_final();
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -547,7 +547,7 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectTaintedRescursiveWithPrimitiveArraysFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			final myStruct_arr_final m = new myStruct_arr_final();
+			final MyStruct_arr_final m = new MyStruct_arr_final();
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -567,7 +567,7 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectTaintedRescursiveWithPrimitiveArrays2DFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			final myStruct_arr2D_final m = new myStruct_arr2D_final();
+			final MyStruct_arr2D_final m = new MyStruct_arr2D_final();
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -587,7 +587,7 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectTaintedRecursiveWithReferencesFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			final myStruct_ref_final m = new myStruct_ref_final();
+			final MyStruct_ref_final m = new MyStruct_ref_final();
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -620,7 +620,7 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectTaintedRecursiveWithReferences2DFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			final myStruct_ref2D_final m = new myStruct_ref2D_final();
+			final MyStruct_ref2D_final m = new MyStruct_ref2D_final();
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -653,7 +653,7 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectArrayTaintedRecursiveFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			myStruct_ref_final[] m = { new myStruct_ref_final(), new myStruct_ref_final() };
+			MyStruct_ref_final[] m = { new MyStruct_ref_final(), new MyStruct_ref_final() };
 
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
@@ -687,8 +687,8 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectArrayTaintedRecursive2DFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			myStruct_ref2D_final[][] m = { { new myStruct_ref2D_final() },
-					{ new myStruct_ref2D_final() } };
+			MyStruct_ref2D_final[][] m = { { new MyStruct_ref2D_final() },
+					{ new MyStruct_ref2D_final() } };
 
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
@@ -722,7 +722,7 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectTaintedRecursiveWithReferenceArraysFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			myStruct_ref_array_final m = new myStruct_ref_array_final();
+			MyStruct_ref_array_final m = new MyStruct_ref_array_final();
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
 
@@ -757,7 +757,7 @@ public class RecursiveMultiTainterTest {
 		public void CustomObjectTaintedRecursiveWithReferenceArrays2DFinal()
 				throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 				Exception {
-			myStruct_ref_array2D_final m = new myStruct_ref_array2D_final();
+			MyStruct_ref_array2D_final m = new MyStruct_ref_array2D_final();
 			RecursiveMultiTainter R = new RecursiveMultiTainter();
 			R.taintObjects(m, new Taint<String>("tainted_recursive"));
 

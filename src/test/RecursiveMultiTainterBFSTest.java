@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import tainter.RecursiveMultiTainterBFS;
 import classes.Foo.MyStruct;
-import classes.Foo.myStruct_arr;
+import classes.Foo.MyStruct_arr;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
 
@@ -87,8 +87,8 @@ public class RecursiveMultiTainterBFSTest {
 	
 	@Test
 	public void simpleMaxTaintArray() throws Exception {
-		myStruct_arr ms = new myStruct_arr();
-		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 4);
+		MyStruct_arr ms = new MyStruct_arr();
+		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 6);
 		rtbfs.taintObjects(ms, new Taint<String>("simple"));
 		int counter = 0;	
 		if (MultiTainter.getTaint(ms) != null) counter++;
@@ -96,13 +96,26 @@ public class RecursiveMultiTainterBFSTest {
 		if (MultiTainter.getTaint(ms.arr_i[1]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_i[2]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_b[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_b[1]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_b[2]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_c[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_c[1]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_c[2]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_d[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_d[1]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_d[2]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_f[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_f[1]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_f[2]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_j[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_j[1]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_j[2]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_s[0]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_s[1]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_s[2]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_z[0]) != null) counter++;
-		assertEquals(counter, 4);
-		
+		if (MultiTainter.getTaint(ms.arr_z[1]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_z[2]) != null) counter++;
+		assertEquals(counter, 6);	
 	}
 }
