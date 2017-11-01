@@ -6,6 +6,7 @@ import helper.LevelObjPairComparator;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -22,6 +23,7 @@ public class RecursiveMultiTainterBFS {
 	private int MAX_TAINTS;
 	private int CurrTaints = 0;
 	private Taint<String> taint;
+	private HashMap<Integer, Integer> Results;
 
 	public RecursiveMultiTainterBFS(int level, int MAX_TAINTS) {
 		this.MAX_LEVEL = level;
@@ -46,7 +48,8 @@ public class RecursiveMultiTainterBFS {
 		System.out.println("Number of Current Taints : " + this.CurrTaints);
 		System.out.println("Taint label : " + this.taint.lbl.toString());
 	}
-
+	
+	
 	public void taintObjects(Object obj, Taint<String> taint, int max_level,
 			int max_taints) throws ArrayIndexOutOfBoundsException,
 			IllegalArgumentException, Exception {
@@ -141,43 +144,46 @@ public class RecursiveMultiTainterBFS {
 			throws Exception {
 		int ElementsToBeTainted = this.MAX_TAINTS - this.CurrTaints;
 		this.CurrTaints += ElementsToBeTainted;
+		String CompType = obj.getClass().getComponentType().getName();
+		System.out.println(CompType);
 		for (int i = 0; i < ElementsToBeTainted; i++) {
-			switch (Array.get(obj, i).getClass().getTypeName()) {
-			case "java.lang.Int":
-				Array.set(obj, i, MultiTainter.taintedInt(Array.getInt(obj, i),
-						this.taint.lbl)); 
+			switch (CompType) {
+			case "int":
+				int[] temp_int = (int[]) obj;
+				temp_int[i] = MultiTainter.taintedInt(temp_int[i], taint.lbl);
+				obj = temp_int;
 				break;
-			case "java.lang.Long":
+			case "long":
 				long[] temp_long = (long[]) obj;
 				temp_long[i] = MultiTainter.taintedLong(temp_long[i], taint.lbl);
 				obj = temp_long;
 				break;
-			case "java.lang.Boolean":
-				Boolean[] temp_boolean = (Boolean[]) obj;
+			case "boolean":
+				boolean[] temp_boolean = (boolean[]) obj;
 				temp_boolean[i] = MultiTainter.taintedBoolean(temp_boolean[i], taint.lbl);
 				obj = temp_boolean;
 				break;
-			case "java.lang.Short":
-				Short[] temp_short = (Short[]) obj;
+			case "short":
+				short[] temp_short = (short[]) obj;
 				temp_short[i] = MultiTainter.taintedShort(temp_short[i], taint.lbl);
 				obj = temp_short;
 				break;
-			case "java.lang.Double":
-				Double[] temp_double = (Double[]) obj;
+			case "double":
+				double[] temp_double = (double[]) obj;
 				temp_double[i] = MultiTainter.taintedDouble(temp_double[i], taint.lbl);
 				obj = temp_double;
 				break;
-			case "java.lang.Byte":
-				Byte[] temp_byte = (Byte[]) obj;
+			case "byte":
+				byte[] temp_byte = (byte[]) obj;
 				temp_byte[i] = MultiTainter.taintedByte(temp_byte[i], taint.lbl);
 				obj = temp_byte;
-			case "java.lang.Char":
+			case "char":
 				char[] temp_char = (char[]) obj;
 				temp_char[i] = MultiTainter.taintedChar(temp_char[i], taint.lbl);
 				obj = temp_char;
 				break;
-			case "java.lang.Float":
-				Float[] temp_float = (Float[]) obj;
+			case "float":
+				float[] temp_float = (float[]) obj;
 				temp_float[i] = MultiTainter.taintedFloat(temp_float[i], taint.lbl);
 				obj = temp_float;
 				break;
@@ -331,4 +337,15 @@ public class RecursiveMultiTainterBFS {
 		return obj;
 	}
 
+	public int getMAX_LEVEL() {
+		return MAX_LEVEL;
+	}
+
+	public int getMAX_TAINTS() {
+		return MAX_TAINTS;
+	}
+
+	public int getCurrTaints() {
+		return CurrTaints;
+	}
 }

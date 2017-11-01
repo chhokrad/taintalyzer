@@ -64,7 +64,7 @@ public class RecursiveMultiTainterBFSTest {
 			System.out.println(obj_.getClass().getComponentType().getName());
 			System.out.println(Array.get(obj_, index));
 			System.out.println(MultiTainter.getTaint(Array.get(obj_, index)));
-			//if (MultiTainter.getTaint(Array.get(obj_, index)) != null) numTaints++;
+			if (MultiTainter.getTaint(Array.get(obj_, index)) != null) numTaints++;
 		}
 			
 		return numTaints;
@@ -88,7 +88,7 @@ public class RecursiveMultiTainterBFSTest {
 	@Test
 	public void simpleMaxTaintArray() throws Exception {
 		MyStruct_arr ms = new MyStruct_arr();
-		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 6);
+		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 8);
 		rtbfs.taintObjects(ms, new Taint<String>("simple"));
 		int counter = 0;	
 		if (MultiTainter.getTaint(ms) != null) counter++;
@@ -117,6 +117,6 @@ public class RecursiveMultiTainterBFSTest {
 		if (MultiTainter.getTaint(ms.arr_z[0]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_z[1]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_z[2]) != null) counter++;
-		assertEquals(counter, 6);	
+		assertEquals(counter, 8);	
 	}
 }
