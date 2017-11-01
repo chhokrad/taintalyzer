@@ -98,6 +98,7 @@ public class RecursiveMultiTainterBFSTest {
 		if (MultiTainter.getTaint(ms.arr_b[0]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_b[1]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_b[2]) != null) counter++;
+		if (MultiTainter.getTaint(ms.arr_b[3]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_c[0]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_c[1]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_c[2]) != null) counter++;
