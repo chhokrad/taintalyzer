@@ -1,4 +1,4 @@
-package test;
+package edu.vanderbilt.taintalayzer.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -12,14 +12,14 @@ import java.util.Queue;
 import org.apache.commons.lang3.ClassUtils;
 import org.junit.Test;
 
-import tainter.RecursiveMultiTainter;
-import tainter.RecursiveMultiTainterBFS;
-import tainter.RecursiveMultiTainterBFS_;
-import classes.Foo.MyStruct;
-import classes.Foo.MyStruct_arr;
-import classes.Foo.MyStruct_ref_array2D;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
+import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainter;
+import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainterBFS;
+import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainterBFS_;
+import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct;
+import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_arr;
+import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_ref_array2D;
 
 public class RecursiveMultiTainterBFSTest {
 	

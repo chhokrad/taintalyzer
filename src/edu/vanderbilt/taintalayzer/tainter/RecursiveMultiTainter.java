@@ -1,4 +1,4 @@
-package tainter;
+package edu.vanderbilt.taintalayzer.tainter;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;

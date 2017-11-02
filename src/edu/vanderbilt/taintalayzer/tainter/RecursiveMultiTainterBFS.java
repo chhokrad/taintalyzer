@@ -1,4 +1,4 @@
-package tainter;
+package edu.vanderbilt.taintalayzer.tainter;
 
 import helper.LevelObjPair;
 import helper.LevelObjPairComparator;
@@ -12,9 +12,9 @@ import java.util.Queue;
 
 import org.apache.commons.lang3.ClassUtils;
 
-import classes.ResultsMap;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
+import edu.vanderbilt.taintalayzer.utility.ResultsMap;
 
 public class RecursiveMultiTainterBFS {
 	private Queue<LevelObjPair> myQueue = new PriorityQueue<LevelObjPair>(

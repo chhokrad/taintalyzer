@@ -1,4 +1,4 @@
-package classes;
+package edu.vanderbilt.taintalayzer.test.sample;
 
 public class Foo {
 	
@@ -24,13 +24,13 @@ public class Foo {
 		final public float f = 34;
 	}
 	
-	public static class MyStruct_arr{
+	public static class MyStruct_arr {
 		public int[] arr_i = {1,2,3};
 		public long[] arr_j = {1,2,3};
 		public boolean[] arr_z = {true, false, true};
 		public short[] arr_s = {1,2,3};
 		public double[] arr_d = {1.1, 2.2, 3.3};
-		public byte[] arr_b = {0,1,0,0};
+		public byte[] arr_b = {0, 1, 0, 0};
 		public char[] arr_c = {'1','2','3'};
 		public float[] arr_f = {1,2,3};
 	}
@@ -57,8 +57,10 @@ public class Foo {
 		final public MyStruct_arr_final m2 = new MyStruct_arr_final();
 	}
 	
-	public static class MyStruct_ref_array{
-		public MyStruct_ref[] m3 = {new MyStruct_ref(), new MyStruct_ref()};
+	public static class MyStruct_ref_array {
+		public MyStruct_ref[] m3 = {
+				new MyStruct_ref(),
+				new MyStruct_ref() };
 	}
 	
 	public static class MyStruct_ref_array_final{
@@ -66,7 +68,7 @@ public class Foo {
 	}
 	
 	
-	public static class MyStruct_arr2D{
+	public static class MyStruct_arr2D {
 		public int[][] arr_i = {{1},{3}};
 		public long[][] arr_j = {{1},{3}};
 		public boolean[][] arr_z = {{true}, {true}};
@@ -77,7 +79,7 @@ public class Foo {
 		public float[][] arr_f = {{1},{3}};
 	}
 	
-	public static class MyStruct_arr2D_final{
+	public static class MyStruct_arr2D_final {
 		final public int[][] arr_i = {{1},{3}};
 		final public long[][] arr_j = {{1},{3}};
 		final public boolean[][] arr_z = {{true}, {true}};
@@ -88,7 +90,7 @@ public class Foo {
 		final public float[][] arr_f = {{1},{3}};
 	}
 	
-	public static class MyStruct_ref2D{
+	public static class MyStruct_ref2D {
 		public MyStruct m1 = new MyStruct();
 		public MyStruct_arr2D m2 = new MyStruct_arr2D();
 	}
@@ -98,11 +100,11 @@ public class Foo {
 		final public MyStruct_arr2D_final m2 = new MyStruct_arr2D_final();
 	}
 	
-	public static class MyStruct_ref_array2D{
+	public static class MyStruct_ref_array2D {
 		public MyStruct_ref2D[][] m3 = {{new MyStruct_ref2D()}, {new MyStruct_ref2D()}};
 	}
 	
-	public static class MyStruct_ref_array2D_final{
+	public static class MyStruct_ref_array2D_final {
 		final public MyStruct_ref2D_final[][] m3 = {{new MyStruct_ref2D_final()}, {new MyStruct_ref2D_final()}};
 	}
 	

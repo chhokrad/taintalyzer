@@ -1,4 +1,4 @@
-package classes;
+package edu.vanderbilt.taintalayzer.test.sample;
 
 public class AnotherStruct {
 
