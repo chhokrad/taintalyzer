@@ -16,7 +16,7 @@ import classes.ResultsMap;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
 
-public class RecursiveMultiTainterBFS {
+public class RecursiveMultiTainterBFS_ {
 	private Queue<LevelObjPair> myQueue = new PriorityQueue<LevelObjPair>(
 			new LevelObjPairComparator());
 	private int MAX_LEVEL;
@@ -25,7 +25,7 @@ public class RecursiveMultiTainterBFS {
 	private Taint<String> taint;
 	private ResultsMap data = new ResultsMap();
 
-	public RecursiveMultiTainterBFS(int level, int MAX_TAINTS) {
+	public RecursiveMultiTainterBFS_(int level, int MAX_TAINTS) {
 		this.MAX_LEVEL = level;
 		this.MAX_TAINTS = MAX_TAINTS;
 		this.CurrTaints = 0;
@@ -75,8 +75,12 @@ public class RecursiveMultiTainterBFS {
 				if (obj.getClass().isArray()) {
 					boolean isPrimitive = this.isPrimitiveArray(obj);
 					// obj is an array of primitive types
-					if (isPrimitive)
+					if (isPrimitive){
+						int prev = this.CurrTaints;
 						this.taintPrimitiveArrayfiltered(obj);
+						int now = this.CurrTaints - prev;
+						data.updateKeyValueBy(p.getLevel(), now);
+					}
 					// obj is an array of custom types
 					else
 						this.taintCustomArrayfiltered(p);
@@ -248,6 +252,7 @@ public class RecursiveMultiTainterBFS {
 	private void taintCustomObjectfiltered(LevelObjPair p) throws Exception {
 		MultiTainter.taintedObject(p.getObj(), taint);
 		this.CurrTaints++;
+		this.data.updateKeyValueBy(p.getLevel(), 1);
 		if (p.getLevel() < this.MAX_LEVEL) {
 			Object obj = p.getObj();
 			for (Field f : obj.getClass().getDeclaredFields()) {
@@ -256,6 +261,7 @@ public class RecursiveMultiTainterBFS {
 				f.setAccessible(true);
 				if (ClassUtils.isPrimitiveOrWrapper(f.getType())) {
 					if (!Modifier.isFinal(f.getModifiers())) {
+						this.data.updateKeyValueBy(p.getLevel()+1, 1);
 						if (f.getType() == int.class) {
 							f.setInt(obj, MultiTainter.taintedInt(
 									f.getInt(obj), taint.getLabel()));
@@ -291,6 +297,7 @@ public class RecursiveMultiTainterBFS {
 						} else if (f.getType() == void.class) {
 							System.out.println("Skipping void");
 						} else {
+							this.data.updateKeyValueBy(p.getLevel()+1, -1);
 							throw new Exception("Primitive Type Decoding Error");
 						}
 					} else
@@ -299,13 +306,21 @@ public class RecursiveMultiTainterBFS {
 								+ obj.getClass().getName());
 				} else if ((f.get(obj)).getClass().isArray()
 						&& this.isPrimitiveArray(f.get(obj))
-						&& !this.isGreaterThanOneDimension(f.get(obj)))
+						&& !this.isGreaterThanOneDimension(f.get(obj))){
+					int prev = this.CurrTaints;
 					f.set(obj,
 							this.taintPrimitiveArrayWreturnfiltered(f.get(obj)));
+					int now = this.CurrTaints;
+					this.data.updateKeyValueBy(p.getLevel()+1, now-prev);
+				}
 				else if ((f.get(obj)).getClass().isArray()
 						&& this.isPrimitiveArray(f.get(obj))
-						&& this.isGreaterThanOneDimension(f.get(obj)))
+						&& this.isGreaterThanOneDimension(f.get(obj))){
+					int prev = this.CurrTaints;
 					this.taintPrimitiveArrayfiltered(f.get(obj));
+					int now = this.CurrTaints;
+					this.data.updateKeyValueBy(p.getLevel()+1, now-prev);
+				}
 				else
 					this.myQueue.add(new LevelObjPair(p.getLevel() + 1, f
 							.get(obj)));

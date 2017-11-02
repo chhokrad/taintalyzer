@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -11,9 +12,12 @@ import java.util.Queue;
 import org.apache.commons.lang3.ClassUtils;
 import org.junit.Test;
 
+import tainter.RecursiveMultiTainter;
 import tainter.RecursiveMultiTainterBFS;
+import tainter.RecursiveMultiTainterBFS_;
 import classes.Foo.MyStruct;
 import classes.Foo.MyStruct_arr;
+import classes.Foo.MyStruct_ref_array2D;
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
 
@@ -76,12 +80,13 @@ public class RecursiveMultiTainterBFSTest {
 		MyStruct ms = new MyStruct();
 		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 3);
 		rtbfs.taintObjects(ms, new Taint<String>("tainted_recursive"));
-		int counter = 0;		
+		int counter = 0;
+		if (MultiTainter.getTaint(ms)!= null) counter++;
 		for (Field f : ms.getClass().getDeclaredFields()) {
 			if (Modifier.isFinal(f.getModifiers())) continue;
 			if (getTaintPrimitive(f, ms) != null) counter++;
 		}
-		assertEquals(counter, 2);
+		assertEquals(counter, 3);
 	}
 	
 	
@@ -118,5 +123,16 @@ public class RecursiveMultiTainterBFSTest {
 		if (MultiTainter.getTaint(ms.arr_z[1]) != null) counter++;
 		if (MultiTainter.getTaint(ms.arr_z[2]) != null) counter++;
 		assertEquals(counter, 8);	
+	}
+	
+	@Test
+	public void CustomObjectTaintedRescursiveWithPrimitiveArrays()
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
+			Exception {
+		MyStruct_ref_array2D m = new MyStruct_ref_array2D();
+		RecursiveMultiTainterBFS_ R = new RecursiveMultiTainterBFS_(2, 5);
+		R.taintObjects(m, new Taint<String>("tainted_recursive"));
+
+		assertEquals(R.getCurrTaints(), 5);
 	}
 }
