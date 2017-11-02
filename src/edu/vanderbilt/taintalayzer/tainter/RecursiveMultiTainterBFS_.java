@@ -17,8 +17,7 @@ import edu.columbia.cs.psl.phosphor.runtime.Taint;
 import edu.vanderbilt.taintalayzer.utility.ResultsMap;
 
 public class RecursiveMultiTainterBFS_ {
-	private Queue<LevelObjPair> myQueue = new PriorityQueue<LevelObjPair>(
-			new LevelObjPairComparator());
+	private Queue<LevelObjPair> myQueue = new PriorityQueue<LevelObjPair>(new LevelObjPairComparator());
 	private int MAX_LEVEL;
 	private int MAX_TAINTS;
 	private int CurrTaints = 0;
@@ -32,11 +31,10 @@ public class RecursiveMultiTainterBFS_ {
 	}
 
 	public void taintObjects(Object obj, Taint<String> taint)
-			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
-			Exception {
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		this.CurrTaints = 0;
 		this.taint = taint;
-		this.printState();
+//		this.printState();
 		this.taintObjectsfiltered(new LevelObjPair(0, obj));
 	}
 
@@ -48,11 +46,9 @@ public class RecursiveMultiTainterBFS_ {
 		System.out.println("Number of Current Taints : " + this.CurrTaints);
 		System.out.println("Taint label : " + this.taint.lbl.toString());
 	}
-	
-	
-	public void taintObjects(Object obj, Taint<String> taint, int max_level,
-			int max_taints) throws ArrayIndexOutOfBoundsException,
-			IllegalArgumentException, Exception {
+
+	public void taintObjects(Object obj, Taint<String> taint, int max_level, int max_taints)
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		this.MAX_LEVEL = max_level;
 		this.MAX_TAINTS = max_taints;
 		this.taint = taint;
@@ -60,22 +56,20 @@ public class RecursiveMultiTainterBFS_ {
 	}
 
 	private void taintObjectsfiltered(LevelObjPair p_)
-			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
-			Exception {
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		myQueue.add(p_);
 		while (!this.myQueue.isEmpty()) {
 			LevelObjPair p = this.myQueue.poll();
-			if (p.getLevel() <= this.MAX_LEVEL
-					&& this.CurrTaints < this.MAX_TAINTS) {
+			if (p.getLevel() <= this.MAX_LEVEL && this.CurrTaints < this.MAX_TAINTS) {
 				Object obj = p.getObj();
 				if (obj == null) {
-					System.out.println("Skipping null object");
+					// System.out.println("Skipping null object");
 				}
 				// Checking if the obj is an array
 				if (obj.getClass().isArray()) {
 					boolean isPrimitive = this.isPrimitiveArray(obj);
 					// obj is an array of primitive types
-					if (isPrimitive){
+					if (isPrimitive) {
 						int prev = this.CurrTaints;
 						this.taintPrimitiveArrayfiltered(obj);
 						int now = this.CurrTaints - prev;
@@ -122,15 +116,13 @@ public class RecursiveMultiTainterBFS_ {
 	}
 
 	private void taintPrimitiveArrayfiltered(Object obj)
-			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
-			Exception {
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		Queue<Object> myqueue = new LinkedList<Object>();
 		myqueue.add(obj);
 		while (!myqueue.isEmpty()) {
 			Object obj_ = new Object();
 			obj_ = myqueue.poll();
-			if (ClassUtils.isPrimitiveOrWrapper(obj_.getClass()
-					.getComponentType())) {
+			if (ClassUtils.isPrimitiveOrWrapper(obj_.getClass().getComponentType())) {
 				if ((Array.getLength(obj_) + this.CurrTaints) <= this.MAX_TAINTS)
 					this.taintPrimitiveArray1Dfiltered(obj_);
 				else
@@ -144,12 +136,11 @@ public class RecursiveMultiTainterBFS_ {
 
 	}
 
-	private void taintPrimitiveArray1DfilteredbyElement(Object obj)
-			throws Exception {
+	private void taintPrimitiveArray1DfilteredbyElement(Object obj) throws Exception {
 		int ElementsToBeTainted = this.MAX_TAINTS - this.CurrTaints;
 		this.CurrTaints += ElementsToBeTainted;
 		String CompType = obj.getClass().getComponentType().getName();
-		System.out.println(CompType);
+//		System.out.println(CompType);
 		for (int i = 0; i < ElementsToBeTainted; i++) {
 			switch (CompType) {
 			case "int":
@@ -191,7 +182,7 @@ public class RecursiveMultiTainterBFS_ {
 				temp_float[i] = MultiTainter.taintedFloat(temp_float[i], taint.lbl);
 				obj = temp_float;
 				break;
-			default: 
+			default:
 				this.CurrTaints -= ElementsToBeTainted;
 				throw new Exception("Primtive Type Decoding Error");
 			}
@@ -199,37 +190,27 @@ public class RecursiveMultiTainterBFS_ {
 	}
 
 	private void taintPrimitiveArray1Dfiltered(Object obj)
-			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
-			Exception {
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		this.CurrTaints += Array.getLength(obj);
-		if (obj.getClass().getComponentType().getTypeName() == int.class
-				.getTypeName()) {
+		if (obj.getClass().getComponentType().getTypeName() == int.class.getTypeName()) {
 			obj = MultiTainter.taintedIntArray((int[]) obj, taint);
-		} else if (obj.getClass().getComponentType().getTypeName() == long.class
-				.getTypeName()) {
+		} else if (obj.getClass().getComponentType().getTypeName() == long.class.getTypeName()) {
 			obj = MultiTainter.taintedLongArray((long[]) obj, taint);
-		} else if (obj.getClass().getComponentType().getTypeName() == boolean.class
-				.getTypeName()) {
+		} else if (obj.getClass().getComponentType().getTypeName() == boolean.class.getTypeName()) {
 			obj = MultiTainter.taintedBooleanArray((boolean[]) obj, taint);
-		} else if (obj.getClass().getComponentType().getTypeName() == short.class
-				.getTypeName()) {
+		} else if (obj.getClass().getComponentType().getTypeName() == short.class.getTypeName()) {
 			obj = MultiTainter.taintedShortArray((short[]) obj, taint);
-		} else if (obj.getClass().getComponentType().getTypeName() == double.class
-				.getTypeName()) {
+		} else if (obj.getClass().getComponentType().getTypeName() == double.class.getTypeName()) {
 			obj = MultiTainter.taintedDoubleArray((double[]) obj, taint);
-		} else if (obj.getClass().getComponentType().getTypeName() == byte.class
-				.getTypeName()) {
+		} else if (obj.getClass().getComponentType().getTypeName() == byte.class.getTypeName()) {
 			obj = MultiTainter.taintedByteArray((byte[]) obj, taint);
-		} else if (obj.getClass().getComponentType().getTypeName() == char.class
-				.getTypeName()) {
+		} else if (obj.getClass().getComponentType().getTypeName() == char.class.getTypeName()) {
 			obj = MultiTainter.taintedCharArray((char[]) obj, taint);
-		} else if (obj.getClass().getComponentType().getTypeName() == float.class
-				.getTypeName()) {
+		} else if (obj.getClass().getComponentType().getTypeName() == float.class.getTypeName()) {
 			obj = MultiTainter.taintedFloatArray((float[]) obj, taint);
-		} else if (obj.getClass().getComponentType().getTypeName() == void.class
-				.getTypeName()) {
+		} else if (obj.getClass().getComponentType().getTypeName() == void.class.getTypeName()) {
 			this.CurrTaints -= Array.getLength(obj);
-			System.out.println("Skipping Void type");
+			// System.out.println("Skipping Void type");
 		} else {
 			this.CurrTaints -= Array.getLength(obj);
 			throw new Exception("Primitive Array Type Decoding Error");
@@ -237,16 +218,13 @@ public class RecursiveMultiTainterBFS_ {
 	}
 
 	private void taintCustomArrayfiltered(LevelObjPair p)
-			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
-			Exception {
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		for (int i = 0; i < Array.getLength(p.getObj()); i++)
-			this.myQueue.add(new LevelObjPair(p.getLevel(), Array.get(
-					p.getObj(), i)));
+			this.myQueue.add(new LevelObjPair(p.getLevel(), Array.get(p.getObj(), i)));
 	}
 
 	private void taintPrimitivefiltered(Object obj) {
-		System.out
-				.println("Recursive Multitainter is not suited for Primitive types");
+		System.out.println("Recursive Multitainter is not suited for Primitive types");
 	}
 
 	private void taintCustomObjectfiltered(LevelObjPair p) throws Exception {
@@ -295,15 +273,17 @@ public class RecursiveMultiTainterBFS_ {
 									f.getFloat(obj), taint.getLabel()));
 							this.CurrTaints++;
 						} else if (f.getType() == void.class) {
-							System.out.println("Skipping void");
+//							System.out.println("Skipping void");
 						} else {
 							this.data.updateKeyValueBy(p.getLevel()+1, -1);
 							throw new Exception("Primitive Type Decoding Error");
 						}
-					} else
-						System.out.println("Skipping tainting a Final Field : "
-								+ f.getType() + " " + f.getName() + " in "
-								+ obj.getClass().getName());
+					} else {
+//						System.out.println("Skipping tainting a Final Field : "
+//								+ f.getType() + " " + f.getName() + " in "
+//								+ obj.getClass().getName());
+					}
+
 				} else if ((f.get(obj)).getClass().isArray()
 						&& this.isPrimitiveArray(f.get(obj))
 						&& !this.isGreaterThanOneDimension(f.get(obj))){
@@ -330,15 +310,13 @@ public class RecursiveMultiTainterBFS_ {
 	}
 
 	private Object taintPrimitiveArrayWreturnfiltered(Object obj)
-			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
-			Exception {
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		Queue<Object> myqueue = new LinkedList<Object>();
 		myqueue.add(obj);
 		while (!myqueue.isEmpty()) {
 			Object obj_ = new Object();
 			obj_ = myqueue.poll();
-			if (ClassUtils.isPrimitiveOrWrapper(obj_.getClass()
-					.getComponentType())) {
+			if (ClassUtils.isPrimitiveOrWrapper(obj_.getClass().getComponentType())) {
 				if ((Array.getLength(obj_) + this.CurrTaints) <= this.MAX_TAINTS)
 					this.taintPrimitiveArray1Dfiltered(obj_);
 				else

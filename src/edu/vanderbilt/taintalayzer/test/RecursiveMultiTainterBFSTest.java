@@ -1,7 +1,6 @@
 package edu.vanderbilt.taintalayzer.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -14,7 +13,6 @@ import org.junit.Test;
 
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
-import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainter;
 import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainterBFS;
 import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainterBFS_;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct;
@@ -75,7 +73,7 @@ public class RecursiveMultiTainterBFSTest {
 	}
 
 	
-	
+	@Test
 	public void simpleMaxTaint() throws Exception {
 		MyStruct ms = new MyStruct();
 		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 3);
@@ -90,7 +88,7 @@ public class RecursiveMultiTainterBFSTest {
 	}
 	
 	
-	
+	@Test
 	public void simpleMaxTaintArray() throws Exception {
 		MyStruct_arr ms = new MyStruct_arr();
 		RecursiveMultiTainterBFS rtbfs = new RecursiveMultiTainterBFS(Integer.MAX_VALUE, 8);
@@ -126,14 +124,11 @@ public class RecursiveMultiTainterBFSTest {
 	}
 	
 	@Test
-	public void CustomObjectTaintedRescursiveWithPrimitiveArrays()
-			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
-			Exception {
+	public void CustomObjectTaintedRescursiveWithPrimitiveArrays() throws Exception {
 		MyStruct_ref_array2D m = new MyStruct_ref_array2D();
 		RecursiveMultiTainterBFS_ R = new RecursiveMultiTainterBFS_(2, 5);
 		R.taintObjects(m, new Taint<String>("tainted_recursive"));
-
-		//assertEquals(R.getCurrTaints(), 7);
-		System.out.println(R.getData().getKeySet().contains(4));
+		assertEquals(R.getCurrTaints(), 5);
+//		System.out.println(R.getData().getKeySet().contains(4));
 	}
 }

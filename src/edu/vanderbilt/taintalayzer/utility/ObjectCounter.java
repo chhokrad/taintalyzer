@@ -27,7 +27,7 @@ public class ObjectCounter {
 		HashMap<Integer, Integer> result = new HashMap<Integer, Integer>();
 		if (o == null)
 			return result;
-		
+
 		if (ClassUtils.isPrimitiveOrWrapper(o.getClass())) {
 			result.put(0, 1);
 			return result;

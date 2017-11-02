@@ -36,7 +36,7 @@ public class RecursiveMultiTainterBFS {
 			Exception {
 		this.CurrTaints = 0;
 		this.taint = taint;
-		this.printState();
+//		this.printState();
 		this.taintObjectsfiltered(new LevelObjPair(0, obj));
 	}
 
@@ -145,7 +145,7 @@ public class RecursiveMultiTainterBFS {
 		int ElementsToBeTainted = this.MAX_TAINTS - this.CurrTaints;
 		this.CurrTaints += ElementsToBeTainted;
 		String CompType = obj.getClass().getComponentType().getName();
-		System.out.println(CompType);
+//		System.out.println(CompType);
 		for (int i = 0; i < ElementsToBeTainted; i++) {
 			switch (CompType) {
 			case "int":
