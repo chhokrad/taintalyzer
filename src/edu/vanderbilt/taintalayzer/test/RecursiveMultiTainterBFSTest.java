@@ -13,11 +13,13 @@ import org.junit.Test;
 
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
+import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainter;
 import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainterBFS;
 import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainterBFS_;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_arr;
-import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_ref_array2D;
+import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_ref_array2DNoBool;
+import edu.vanderbilt.taintalayzer.utility.ObjectCounter;
 
 public class RecursiveMultiTainterBFSTest {
 	
@@ -124,11 +126,17 @@ public class RecursiveMultiTainterBFSTest {
 	}
 	
 	@Test
-	public void CustomObjectTaintedRescursiveWithPrimitiveArrays() throws Exception {
-		MyStruct_ref_array2D m = new MyStruct_ref_array2D();
-		RecursiveMultiTainterBFS_ R = new RecursiveMultiTainterBFS_(2, 5);
-		R.taintObjects(m, new Taint<String>("tainted_recursive"));
-		assertEquals(R.getCurrTaints(), 5);
+	public void TestMyStruct_ref_array2DNoBool() throws Exception {
+		MyStruct_ref_array2DNoBool m = new MyStruct_ref_array2DNoBool();
+		RecursiveMultiTainterBFS_ R = new RecursiveMultiTainterBFS_(4, 100);
+		RecursiveMultiTainterBFS R_ = new RecursiveMultiTainterBFS(4, 100);
+		RecursiveMultiTainter R__ = new RecursiveMultiTainter();
+		R__.taintObjects(m, new Taint<String>("tainted_recursive"));
+		System.out.println(ObjectCounter.getStatObjects(m));
+		System.out.println(ObjectCounter.getStatTaints(m));
+//		assertEquals(R.getCurrTaints(), 5);
 //		System.out.println(R.getData().getKeySet().contains(4));
 	}
+	
+	
 }
