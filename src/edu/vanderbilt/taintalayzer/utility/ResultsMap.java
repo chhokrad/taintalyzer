@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class ResultsMap {
-	private HashMap<Integer, Integer> Results =  new HashMap<Integer, Integer>();
+	public HashMap<Integer, Integer> Results =  new HashMap<Integer, Integer>();
 
 	public void updateKeyValueTo(int key, int value)
 	{
