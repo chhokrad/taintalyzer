@@ -46,28 +46,44 @@ public class ObjectCounterDFS {
 			Exception {
 		if (obj.getClass().getComponentType().getTypeName() == int.class
 				.getTypeName()) {
-			obj = MultiTainter.taintedIntArray((int[]) obj, taint);
+			int[] temp = (int[])obj;
+			for (int i = 0 ; i < Array.getLength(temp); i++)
+				System.out.println(MultiTainter.getTaint(temp[i]));
 		} else if (obj.getClass().getComponentType().getTypeName() == long.class
 				.getTypeName()) {
-			obj = MultiTainter.taintedLongArray((long[]) obj, taint);
+			long[] temp = (long[])obj;
+			for (int i = 0 ; i < Array.getLength(temp); i++)
+				System.out.println(MultiTainter.getTaint(temp[i]));
 		} else if (obj.getClass().getComponentType().getTypeName() == boolean.class
 				.getTypeName()) {
-			obj = MultiTainter.taintedBooleanArray((boolean[]) obj, taint);
+			boolean[] temp = (boolean[])obj;
+			for (int i = 0 ; i < Array.getLength(temp); i++)
+				System.out.println(MultiTainter.getTaint(temp[i]));
 		} else if (obj.getClass().getComponentType().getTypeName() == short.class
 				.getTypeName()) {
-			obj = MultiTainter.taintedShortArray((short[]) obj, taint);
+			short[] temp = (short[])obj;
+			for (int i = 0 ; i < Array.getLength(temp); i++)
+				System.out.println(MultiTainter.getTaint(temp[i]));
 		} else if (obj.getClass().getComponentType().getTypeName() == double.class
 				.getTypeName()) {
-			obj = MultiTainter.taintedDoubleArray((double[]) obj, taint);
+			double[] temp = (double[])obj;
+			for (int i = 0 ; i < Array.getLength(temp); i++)
+				System.out.println(MultiTainter.getTaint(temp[i]));
 		} else if (obj.getClass().getComponentType().getTypeName() == byte.class
 				.getTypeName()) {
-			obj = MultiTainter.taintedByteArray((byte[]) obj, taint);
+			byte[] temp = (byte[])obj;
+			for (int i = 0 ; i < Array.getLength(temp); i++)
+				System.out.println(MultiTainter.getTaint(temp[i]));
 		} else if (obj.getClass().getComponentType().getTypeName() == char.class
 				.getTypeName()) {
-			obj = MultiTainter.taintedCharArray((char[]) obj, taint);
+			char[] temp = (char[])obj;
+			for (int i = 0 ; i < Array.getLength(temp); i++)
+				System.out.println(MultiTainter.getTaint(temp[i]));
 		} else if (obj.getClass().getComponentType().getTypeName() == float.class
 				.getTypeName()) {
-			obj = MultiTainter.taintedFloatArray((float[]) obj, taint);
+			float[] temp = (float[])obj;
+			for (int i = 0 ; i < Array.getLength(temp); i++)
+				System.out.println(MultiTainter.getTaint(temp[i]));
 		} else if (obj.getClass().getComponentType().getTypeName() == void.class
 				.getTypeName()) {
 			System.out.println("Skipping Void type");
@@ -125,43 +141,29 @@ public class ObjectCounterDFS {
 
 	private void taintCustomObject(Object obj, Taint<String> taint)
 			throws Exception {
-		MultiTainter.taintedObject(obj, taint);
+		System.out.println(obj.getClass().getName());
+		System.out.println(MultiTainter.getTaint(obj));
 		for (Field f : obj.getClass().getDeclaredFields()) {
+			System.out.println(f.getName() + " : ");
 			f.setAccessible(true);
 				if (ClassUtils.isPrimitiveOrWrapper(f.getType())) {
 					if (!Modifier.isFinal(f.getModifiers())) {
 						if (f.getType() == int.class) {
-							f.setInt(
-									obj,
-									MultiTainter.taintedInt(f.getInt(obj),
-											taint.getLabel()));
+									System.out.println(f.getName() + " " + MultiTainter.getTaint(f.getInt(obj)));
 						} else if (f.getType() == long.class) {
-							f.setLong(
-									obj,
-									MultiTainter.taintedLong(f.getLong(obj),
-											taint.getLabel()));
+							System.out.println(f.getName() + " " + MultiTainter.getTaint(f.getLong(obj)));
 						} else if (f.getType() == boolean.class) {
-							f.setBoolean(obj, MultiTainter.taintedBoolean(
-									f.getBoolean(obj), taint.getLabel()));
+							System.out.println(f.getName() + " " + MultiTainter.getTaint(f.getBoolean(obj)));
 						} else if (f.getType() == short.class) {
-							f.setShort(obj, MultiTainter.taintedShort(
-									f.getShort(obj), taint.getLabel()));
+							System.out.println(f.getName() + " " + MultiTainter.getTaint(f.getShort(obj)));
 						} else if (f.getType() == double.class) {
-							f.setDouble(obj, MultiTainter.taintedDouble(
-									f.getDouble(obj), taint.getLabel()));
+							System.out.println(f.getName() + " " + MultiTainter.getTaint(f.getDouble(obj)));
 						} else if (f.getType() == byte.class) {
-							f.setByte(
-									obj,
-									MultiTainter.taintedByte(f.getByte(obj),
-											taint.getLabel()));
+							System.out.println(f.getName() + " " + MultiTainter.getTaint(f.getByte(obj)));
 						} else if (f.getType() == char.class) {
-							f.setChar(
-									obj,
-									MultiTainter.taintedChar(f.getChar(obj),
-											taint.getLabel()));
+							System.out.println(f.getName() + " " + MultiTainter.getTaint(f.getChar(obj)));
 						} else if (f.getType() == float.class) {
-							f.setFloat(obj, MultiTainter.taintedFloat(
-									f.getFloat(obj), taint.getLabel()));
+							System.out.println(f.getName() + " " + MultiTainter.getTaint(f.getFloat(obj)));
 						} else if (f.getType() == void.class) {
 							System.out.println("Skipping void");
 						} else {
@@ -174,8 +176,7 @@ public class ObjectCounterDFS {
 								+ obj.getClass().getName());
 				} else if ((f.get(obj)).getClass().isArray()
 						&& this.checkArrayType(f.get(obj)) && !this.checkArrayDimension(f.get(obj)))
-					f.set(obj,
-							this.taintPrimitiveArrayWreturn(f.get(obj), taint));
+					this.taintPrimitiveArrayWreturn(f.get(obj), taint);
 				else if ((f.get(obj)).getClass().isArray()
 						&& this.checkArrayType(f.get(obj)) && this.checkArrayDimension(f.get(obj)))
 							this.taintPrimitiveArray(f.get(obj), taint);
@@ -205,7 +206,7 @@ public class ObjectCounterDFS {
 			// type
 			if (ClassUtils.isPrimitiveOrWrapper(obj.getClass()))
 			{
-				
+				System.out.println(MultiTainter.getTaint(obj));
 			}
 				
 			// obj is a reference to custom type
