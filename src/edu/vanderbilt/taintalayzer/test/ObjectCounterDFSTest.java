@@ -1,5 +1,10 @@
 package edu.vanderbilt.taintalayzer.test;
 
+import static org.junit.Assert.*;
+
+import java.util.HashMap;
+
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -7,11 +12,12 @@ import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
 import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainter;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_arr2D;
-import edu.vanderbilt.taintalayzer.utility.ObjectCounterDFS;
+import edu.vanderbilt.taintalayzer.utility.TaintCounterDFS;
 
 public class ObjectCounterDFSTest {
 	
 	public Taint<String> t = new Taint<String>("tainted_recursively");
+	HashMap<Integer, Integer> expectedResult;
 	public static class MyStruct{
 		public int i = 10;
 		public long j = 10;
@@ -35,15 +41,21 @@ public class ObjectCounterDFSTest {
 		public float[] arr_f = {1,2,3};
 	}
 	
-	@Ignore 
+	@Before
+	public void setUp() throws Exception {
+		expectedResult = new HashMap<Integer, Integer>();
+	}
+	
+	@Test
 	public void CheckPrimitive() throws Exception
 	{
 		int i = 0;
 		i = MultiTainter.taintedInt(i, "tainted_directly");
-		System.out.print(MultiTainter.getTaint(i));
-		System.out.println("");
-		ObjectCounterDFS o = new ObjectCounterDFS();
-		o.taintObjects(i, null);
+		TaintCounterDFS o = new TaintCounterDFS();
+		o.findTaintObjects(i);
+		assertEquals(0, o.checkStacklevl());
+		expectedResult.put(0,  1);
+		assertEquals(expectedResult, o.getdata());
 	}
 	
 	
@@ -53,8 +65,12 @@ public class ObjectCounterDFSTest {
 		MyStruct m = new MyStruct();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, t);
-		ObjectCounterDFS o = new ObjectCounterDFS();
-		o.taintObjects(m, t);
+		TaintCounterDFS o = new TaintCounterDFS();
+		o.findTaintObjects(m);
+		assertEquals(0, o.checkStacklevl());
+		expectedResult.put(0, 1);
+		expectedResult.put(1, 8);
+		assertEquals(expectedResult, o.getdata());
 		
 	}
 	
@@ -64,8 +80,8 @@ public class ObjectCounterDFSTest {
 		int[] m = {1,2,3,4};
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, t);
-		ObjectCounterDFS o = new ObjectCounterDFS();
-		o.taintObjects(m, t);
+		TaintCounterDFS o = new TaintCounterDFS();
+		o.findTaintObjects(m);
 		
 	}
 	
@@ -75,8 +91,8 @@ public class ObjectCounterDFSTest {
 		int[][] m = {{1,2,3,4}, {1,2,3,4}};
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, t);
-		ObjectCounterDFS o = new ObjectCounterDFS();
-		o.taintObjects(m, t);
+		TaintCounterDFS o = new TaintCounterDFS();
+		o.findTaintObjects(m);
 		
 	}
 	
@@ -86,19 +102,19 @@ public class ObjectCounterDFSTest {
 		MyStruct_arr m = new MyStruct_arr();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, t);
-		ObjectCounterDFS o = new ObjectCounterDFS();
-		o.taintObjects(m, t);
+		TaintCounterDFS o = new TaintCounterDFS();
+		o.findTaintObjects(m);
 		
 	}
 	
-	@Ignore 
+	@Ignore
 	public void CheckObjectWithPrimitiveArray2D() throws Exception
 	{
 		MyStruct_arr2D m = new MyStruct_arr2D();
 		RecursiveMultiTainter R = new RecursiveMultiTainter();
 		R.taintObjects(m, t);
-		ObjectCounterDFS o = new ObjectCounterDFS();
-		o.taintObjects(m, t);
+		TaintCounterDFS o = new TaintCounterDFS();
+		o.findTaintObjects(m);
 		
 	}
 

@@ -5,7 +5,11 @@ import java.util.Set;
 
 public class ResultsMap {
 	private HashMap<Integer, Integer> Results =  new HashMap<Integer, Integer>();
-
+	
+	public HashMap<Integer, Integer> getresults(){
+		return (HashMap<Integer, Integer>) Results.clone();
+	}
+	
 	public void updateKeyValueTo(int key, int value)
 	{
 		this.Results.put(key, value);
