@@ -14,7 +14,7 @@ import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainter;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_arr2D;
 import edu.vanderbilt.taintalayzer.utility.TaintCounterDFS;
 
-public class ObjectCounterDFSTest {
+public class TaintCounterDFSTest {
 	
 	public Taint<String> t = new Taint<String>("tainted_recursively");
 	HashMap<Integer, Integer> expectedResult;
@@ -27,9 +27,8 @@ public class ObjectCounterDFSTest {
 		public byte b = 0;
 		public char c = '1';
 		public float f = 34;
-		
 	}
-	
+
 	public static class MyStruct_arr {
 		public int[] arr_i = {1,2,3};
 		public long[] arr_j = {1,2,3};
@@ -82,10 +81,10 @@ public class ObjectCounterDFSTest {
 		R.taintObjects(m, t);
 		TaintCounterDFS o = new TaintCounterDFS();
 		o.findTaintObjects(m);
-		
+		assertEquals(0, o.checkStacklevl());
 	}
 	
-	@Ignore
+	@Test
 	public void CheckPrimitiveArray2D() throws Exception
 	{
 		int[][] m = {{1,2,3,4}, {1,2,3,4}};
@@ -93,9 +92,11 @@ public class ObjectCounterDFSTest {
 		R.taintObjects(m, t);
 		TaintCounterDFS o = new TaintCounterDFS();
 		o.findTaintObjects(m);
-		
+		expectedResult.put(0, 8);
+		assertEquals(0, o.checkStacklevl());
+		assertEquals(expectedResult, o.getdata());
 	}
-	
+
 	@Ignore 
 	public void CheckObjectWithPrimitiveArray() throws Exception
 	{
