@@ -22,15 +22,14 @@ public class TaintCounterDFS {
 		levelStack.push(0);
 	}
 
-	public int checkStacklevl(){
+	public int checkStacklevl() {
 		return this.levelStack.peek();
 	}
-	
-	public HashMap<Integer, Integer> getdata()
-	{
+
+	public HashMap<Integer, Integer> getdata() {
 		return data.getresults();
 	}
-	
+
 	private boolean checkArrayDimension(Object obj) {
 		// Returns true if the dimension is greater than one, otherwise, false
 		boolean dimension = false;
@@ -57,69 +56,69 @@ public class TaintCounterDFS {
 		if (obj.getClass().getComponentType().getTypeName() == int.class
 				.getTypeName()) {
 			int[] temp = (int[]) obj;
-			for (int i = 0; i < Array.getLength(temp); i++){
+			for (int i = 0; i < Array.getLength(temp); i++) {
 				System.out.println(MultiTainter.getTaint(temp[i]));
-				if (MultiTainter.getTaint(temp[i]) != null) 
+				if (MultiTainter.getTaint(temp[i]) != null)
 					data.updateKeyValueBy(levelStack.peek(), 1);
 			}
-			
+
 		} else if (obj.getClass().getComponentType().getTypeName() == long.class
 				.getTypeName()) {
 			long[] temp = (long[]) obj;
-			for (int i = 0; i < Array.getLength(temp); i++){
+			for (int i = 0; i < Array.getLength(temp); i++) {
 				System.out.println(MultiTainter.getTaint(temp[i]));
-				if (MultiTainter.getTaint(temp[i]) != null) 
+				if (MultiTainter.getTaint(temp[i]) != null)
 					data.updateKeyValueBy(levelStack.peek(), 1);
 			}
 		} else if (obj.getClass().getComponentType().getTypeName() == boolean.class
 				.getTypeName()) {
 			boolean[] temp = (boolean[]) obj;
-			for (int i = 0; i < Array.getLength(temp); i++){
+			for (int i = 0; i < Array.getLength(temp); i++) {
 				System.out.println(MultiTainter.getTaint(temp[i]));
-				if (MultiTainter.getTaint(temp[i]) != null) 
+				if (MultiTainter.getTaint(temp[i]) != null)
 					data.updateKeyValueBy(levelStack.peek(), 1);
 			}
 		} else if (obj.getClass().getComponentType().getTypeName() == short.class
 				.getTypeName()) {
 			short[] temp = (short[]) obj;
-			for (int i = 0; i < Array.getLength(temp); i++){
+			for (int i = 0; i < Array.getLength(temp); i++) {
 				System.out.println(MultiTainter.getTaint(temp[i]));
-				if (MultiTainter.getTaint(temp[i]) != null) 
+				if (MultiTainter.getTaint(temp[i]) != null)
 					data.updateKeyValueBy(levelStack.peek(), 1);
 			}
 		} else if (obj.getClass().getComponentType().getTypeName() == double.class
 				.getTypeName()) {
 			double[] temp = (double[]) obj;
-			for (int i = 0; i < Array.getLength(temp); i++){
+			for (int i = 0; i < Array.getLength(temp); i++) {
 				System.out.println(MultiTainter.getTaint(temp[i]));
-				if (MultiTainter.getTaint(temp[i]) != null) 
+				if (MultiTainter.getTaint(temp[i]) != null)
 					data.updateKeyValueBy(levelStack.peek(), 1);
 			}
 		} else if (obj.getClass().getComponentType().getTypeName() == byte.class
 				.getTypeName()) {
 			byte[] temp = (byte[]) obj;
-			for (int i = 0; i < Array.getLength(temp); i++){
+			for (int i = 0; i < Array.getLength(temp); i++) {
 				System.out.println(MultiTainter.getTaint(temp[i]));
-				if (MultiTainter.getTaint(temp[i]) != null) 
+				if (MultiTainter.getTaint(temp[i]) != null)
 					data.updateKeyValueBy(levelStack.peek(), 1);
 			}
 		} else if (obj.getClass().getComponentType().getTypeName() == char.class
 				.getTypeName()) {
 			char[] temp = (char[]) obj;
-			for (int i = 0; i < Array.getLength(temp); i++){
+			for (int i = 0; i < Array.getLength(temp); i++) {
 				System.out.println(MultiTainter.getTaint(temp[i]));
-				if (MultiTainter.getTaint(temp[i]) != null) 
+				if (MultiTainter.getTaint(temp[i]) != null)
 					data.updateKeyValueBy(levelStack.peek(), 1);
 			}
 		} else if (obj.getClass().getComponentType().getTypeName() == float.class
 				.getTypeName()) {
 			float[] temp = (float[]) obj;
-			for (int i = 0; i < Array.getLength(temp); i++){
+			for (int i = 0; i < Array.getLength(temp); i++) {
 				System.out.println(MultiTainter.getTaint(temp[i]));
-				if (MultiTainter.getTaint(temp[i]) != null) 
+				if (MultiTainter.getTaint(temp[i]) != null)
 					data.updateKeyValueBy(levelStack.peek(), 1);
 			}
-		} 
+		}
 	}
 
 	private void findTaintPrimitiveArray(Object obj)
@@ -166,11 +165,10 @@ public class TaintCounterDFS {
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
 		for (int i = 0; i < Array.getLength(obj); i++)
-			this.findTaintObjects(Array.get(obj, i));
+			this.findTaintObjects_(Array.get(obj, i));
 	}
 
-	private void findTaintCustomObject(Object obj)
-			throws Exception {
+	private void findTaintCustomObject(Object obj) throws Exception {
 		System.out.println(obj.getClass().getName());
 		System.out.println(MultiTainter.getTaint(obj));
 		if (MultiTainter.getTaint(obj) != null)
@@ -201,8 +199,6 @@ public class TaintCounterDFS {
 								+ MultiTainter.getTaint(f.getShort(obj)));
 						if (MultiTainter.getTaint(f.getShort(obj)) != null)
 							data.updateKeyValueBy(levelStack.peek(), 1);
-						if (MultiTainter.getTaint(f.getInt(obj)) != null)
-							data.updateKeyValueBy(levelStack.peek(), 1);
 					} else if (f.getType() == double.class) {
 						if (MultiTainter.getTaint(f.getDouble(obj)) != null)
 							data.updateKeyValueBy(levelStack.peek(), 1);
@@ -225,44 +221,54 @@ public class TaintCounterDFS {
 								+ MultiTainter.getTaint(f.getFloat(obj)));
 					}
 				}
-			} else if ((f.get(obj)).getClass().isArray()
+			}
+			// this case is not working due to bug in Phosphor
+			else if ((f.get(obj)).getClass().isArray()
 					&& this.checkArrayType(f.get(obj))
 					&& !this.checkArrayDimension(f.get(obj)))
-				this.findTaintPrimitiveArrayWreturn(f.get(obj)); // this case is not working due to bug in Phosphor
+				this.findTaintPrimitiveArrayWreturn(f.get(obj)); 
 			else if ((f.get(obj)).getClass().isArray()
 					&& this.checkArrayType(f.get(obj))
 					&& this.checkArrayDimension(f.get(obj)))
 				this.findTaintPrimitiveArray(f.get(obj));
 			else
-				this.findTaintObjects(f.get(obj));
+				this.findTaintObjects_(f.get(obj));
 		}
 		levelStack.pop();
 	}
-
+	
 	public void findTaintObjects(Object obj)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
 			Exception {
+		data = new ResultsMap();
+		findTaintObjects_(obj);
+		
+	}
+	
+	
+	private void findTaintObjects_(Object obj)
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException,
+			Exception {
 
-		if (obj == null)
-			throw new NullPointerException("Object can not be null");
-		if (obj.getClass().isArray()) {
-			boolean isPrimitive = this.checkArrayType(obj);
-			if (isPrimitive)
-				this.findTaintPrimitiveArray(obj);
-			else
-				this.findTaintCustomArray(obj);
-		} else {
-			if (ClassUtils.isPrimitiveOrWrapper(obj.getClass())) {
-				if (MultiTainter.getTaint(obj) != null){
-					data.updateKeyValueBy(levelStack.peek(), 1);
-					System.out.println(MultiTainter.getTaint(obj));
+		if (obj != null) {
+			if (obj.getClass().isArray()) {
+				boolean isPrimitive = this.checkArrayType(obj);
+				if (isPrimitive)
+					this.findTaintPrimitiveArray(obj);
+				else
+					this.findTaintCustomArray(obj);
+			} else {
+				if (ClassUtils.isPrimitiveOrWrapper(obj.getClass())) {
+					if (MultiTainter.getTaint(obj) != null) {
+						data.updateKeyValueBy(levelStack.peek(), 1);
+						System.out.println(MultiTainter.getTaint(obj));
+					}
 				}
+
+				else
+					this.findTaintCustomObject(obj);
 			}
-
-			else
-				this.findTaintCustomObject(obj);
 		}
-
 	}
 
 }

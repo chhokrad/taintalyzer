@@ -22,16 +22,18 @@ public class RecursiveMultiTainterBFS_ {
 	private int MAX_TAINTS;
 	private int CurrTaints = 0;
 	private Taint<String> taint;
-	private ResultsMap data = new ResultsMap();
+	private ResultsMap data = null;
 
 	public RecursiveMultiTainterBFS_(int level, int MAX_TAINTS) {
 		this.MAX_LEVEL = level;
 		this.MAX_TAINTS = MAX_TAINTS;
 		this.CurrTaints = 0;
+		data = new ResultsMap();
 	}
 
 	public void taintObjects(Object obj, Taint<String> taint)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
+		data = new ResultsMap();
 		this.CurrTaints = 0;
 		this.taint = taint;
 //		this.printState();
@@ -57,7 +59,7 @@ public class RecursiveMultiTainterBFS_ {
 
 	private void taintObjectsfiltered(LevelObjPair p_)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
-		myQueue.add(p_);
+		if (p_.getObj() != null) myQueue.add(p_);
 		while (!this.myQueue.isEmpty()) {
 			LevelObjPair p = this.myQueue.poll();
 			if (p.getLevel() <= this.MAX_LEVEL && this.CurrTaints < this.MAX_TAINTS) {
