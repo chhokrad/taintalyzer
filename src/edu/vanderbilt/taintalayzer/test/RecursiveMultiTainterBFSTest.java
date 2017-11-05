@@ -3,19 +3,12 @@ package edu.vanderbilt.taintalayzer.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashMap;
-
-import jdk.nashorn.internal.objects.annotations.Setter;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
-import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainter;
-import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainterBFS;
 import edu.vanderbilt.taintalayzer.tainter.RecursiveMultiTainterBFS_;
 import edu.vanderbilt.taintalayzer.test.sample.AnotherStruct;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct;

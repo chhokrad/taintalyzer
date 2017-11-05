@@ -11,7 +11,6 @@ import java.util.Stack;
 import org.apache.commons.lang3.ClassUtils;
 
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
-import edu.columbia.cs.psl.phosphor.runtime.Taint;
 
 public class TaintCounterDFS {
 
