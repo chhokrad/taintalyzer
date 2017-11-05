@@ -134,9 +134,11 @@ public class RecursiveMultiTainter {
 					} else {
 						throw new Exception("Primitive Type Decoding Error");
 					}
-				} else
-					System.out.println("Skipping tainting a Final Field : " + f.getType() + " " + f.getName() + " in "
-							+ obj.getClass().getName());
+				}
+				// else
+				// System.out.println("Skipping tainting a Final Field : " + f.getType() + " " +
+				// f.getName() + " in "
+				// + obj.getClass().getName());
 			} else if ((f.get(obj)).getClass().isArray() && isPrimitiveArray(f.get(obj))
 					&& !this.checkArrayDimension(f.get(obj)))
 				f.set(obj, this.taintPrimitiveArrayWreturn(f.get(obj), taint));

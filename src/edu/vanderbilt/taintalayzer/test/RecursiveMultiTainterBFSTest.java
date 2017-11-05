@@ -25,6 +25,7 @@ import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_ref_array2D;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_ref_array2D_final;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_ref_array_final;
 import edu.vanderbilt.taintalayzer.test.sample.Foo.MyStruct_ref_final;
+import edu.vanderbilt.taintalayzer.utility.ObjectCounter;
 import edu.vanderbilt.taintalayzer.utility.TaintCounterDFS;
 
 public class RecursiveMultiTainterBFSTest {
@@ -56,18 +57,21 @@ public class RecursiveMultiTainterBFSTest {
 		assertNotNull(MultiTainter.getTaint(arr_i[0]));
 		assertNotNull(MultiTainter.getTaint(arr_i[1]));
 		assertEquals(R.getData().getresults(), o.getdata());
+		assertEquals(ObjectCounter.getStatTaints(arr_i), o.getdata());
 
 		R.taintObjects(arr_j, t);
-		o.findTaintObjects(arr_i);
+		o.findTaintObjects(arr_j);
 		assertNotNull(MultiTainter.getTaint(arr_j[0]));
 		assertNotNull(MultiTainter.getTaint(arr_j[1]));
 		assertEquals(R.getData().getresults(), o.getdata());
+		assertEquals(ObjectCounter.getStatTaints(arr_j), o.getdata());
 
 		R.taintObjects(arr_z, t);
-		o.findTaintObjects(arr_i);
+		o.findTaintObjects(arr_z);
 		assertNotNull(MultiTainter.getTaint(arr_z[0]));
 		assertNotNull(MultiTainter.getTaint(arr_z[1]));
 		assertEquals(R.getData().getresults(), o.getdata());
+		assertEquals(ObjectCounter.getStatTaints(arr_z), o.getdata());
 
 		R.taintObjects(arr_s, t);
 		o.findTaintObjects(arr_s);
@@ -392,8 +396,7 @@ public class RecursiveMultiTainterBFSTest {
 	}
 
 	@Test
-	public void CustomObjectTaintedRecursiveWithReferenceArrays2D()
-			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
+	public void CustomObjectTaintedRecursiveWithReferenceArrays2D() throws Exception {
 		MyStruct_ref_array2D m = new MyStruct_ref_array2D();
 		R.taintObjects(m, t);
 		o.findTaintObjects(m);
@@ -423,10 +426,11 @@ public class RecursiveMultiTainterBFSTest {
 		assertNotNull(MultiTainter.getTaint(m.m3[1][0].m2.arr_f[0][0]));
 
 		assertEquals(R.getData().getresults(), o.getdata());
+//		assertEquals(ObjectCounter.getStatTaints(m), o.getdata());
 	}
 
 	@Test
-	public void PrivateFieldTest() throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
+	public void PrivateFieldTest() throws Exception {
 		AnotherStruct m = new AnotherStruct();
 		R.taintObjects(m, t);
 		o.findTaintObjects(m);

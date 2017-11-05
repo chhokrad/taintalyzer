@@ -82,6 +82,10 @@ public class ObjectCounterTest {
 		expectedResult.put(1, 8);
 		result = ObjectCounter.getStatObjects(ms);
 		assertEquals(expectedResult, result);
+		RecursiveMultiTainter rmt = new RecursiveMultiTainter();
+		rmt.taintObjects(ms, new Taint<String>("ms"));
+		result = ObjectCounter.getStatTaints(ms);
+		assertEquals(expectedResult, result);
 	}
 
 	@Test
@@ -130,6 +134,10 @@ public class ObjectCounterTest {
 		expectedResult.put(2, 4);
 		expectedResult.put(3, 66);
 		assertEquals(expectedResult, result);
+		RecursiveMultiTainter rmt = new RecursiveMultiTainter();
+		rmt.taintObjects(msra, new Taint<String>("msra"));
+		result = ObjectCounter.getStatTaints(msra);
+		assertEquals(expectedResult, result);
 	}
 
 	@Test
@@ -144,6 +152,10 @@ public class ObjectCounterTest {
 		result = ObjectCounter.getStatObjects(msa2d);
 		expectedResult.put(0, 1);
 		expectedResult.put(1, 16);
+		assertEquals(expectedResult, result);
+		RecursiveMultiTainter rmt = new RecursiveMultiTainter();
+		rmt.taintObjects(msa2d, new Taint<String>("msa2d"));
+		result = ObjectCounter.getStatTaints(msa2d);
 		assertEquals(expectedResult, result);
 	}
 
@@ -177,6 +189,10 @@ public class ObjectCounterTest {
 		expectedResult.put(1, 2);
 		expectedResult.put(2, 4);
 		expectedResult.put(3, 48);
+		assertEquals(expectedResult, result);
+		RecursiveMultiTainter rmt = new RecursiveMultiTainter();
+		rmt.taintObjects(msra2d, new Taint<String>("msra2d"));
+		result = ObjectCounter.getStatTaints(msra2d);
 		assertEquals(expectedResult, result);
 	}
 
@@ -225,8 +241,6 @@ public class ObjectCounterTest {
 		rmt.taintObjects(msa2dnb, new Taint<String>("msa2dnb"));
 		result = ObjectCounter.getStatTaints(msa2dnb);
 		numberOfObjects = ObjectCounter.getStatObjects(msa2dnb);
-		// System.out.println(result);
-		// System.out.println(resultObj);
 	}
 
 	@Test

@@ -89,6 +89,51 @@ public class ObjectCounter {
 		return flag;
 	}
 
+	public static int getNumberOfTaintedPrimitiveFields(Object o) throws Exception {
+		int counter = 0;
+		for (Field f : o.getClass().getDeclaredFields()) {
+			if (Modifier.isFinal(f.getModifiers()))
+				continue;
+			if (ClassUtils.isPrimitiveOrWrapper(f.getType())) {
+				switch (f.getType().getName()) {
+				case "int":
+					if (MultiTainter.getTaint(f.getInt(o)) != null)
+						counter++;
+					break;
+				case "long":
+					if (MultiTainter.getTaint(f.getLong(o)) != null)
+						counter++;
+					break;
+				case "boolean":
+					if (MultiTainter.getTaint(f.getBoolean(o)) != null)
+						counter++;
+					break;
+				case "short":
+					if (MultiTainter.getTaint(f.getShort(o)) != null)
+						counter++;
+					break;
+				case "double":
+					if (MultiTainter.getTaint(f.getDouble(o)) != null)
+						counter++;
+					break;
+				case "byte":
+					if (MultiTainter.getTaint(f.getByte(o)) != null)
+						counter++;
+					break;
+				case "char":
+					if (MultiTainter.getTaint(f.getChar(o)) != null)
+						counter++;
+					break;
+				case "float":
+					if (MultiTainter.getTaint(f.getFloat(o)) != null)
+						counter++;
+					break;
+				}
+			}
+		}
+		return counter;
+	}
+
 	public static HashMap<Integer, Integer> getStatTaints(Object o) throws Exception {
 		return getStat(o, true);
 	}
@@ -144,9 +189,16 @@ public class ObjectCounter {
 
 		} else {
 			result.put(0, 1);
+			if (isTaintCounter) {
+				int numberOfPrimitive = getNumberOfTaintedPrimitiveFields(o);
+				if (numberOfPrimitive > 0)
+					result.put(1, numberOfPrimitive);
+			}
 			for (Field f : o.getClass().getDeclaredFields()) {
 				f.setAccessible(true);
 				if (Modifier.isFinal(f.getModifiers()))
+					continue;
+				if (isTaintCounter && ClassUtils.isPrimitiveOrWrapper(f.getType()))
 					continue;
 				HashMap<Integer, Integer> res = getStat(f.get(o), isTaintCounter);
 				for (Integer key : res.keySet()) {
