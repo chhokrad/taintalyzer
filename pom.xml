@@ -38,7 +38,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>edu.vanderbilt.taintalyzer.main.Taint_Analyzer</mainClass>
+									<mainClass>edu.vanderbilt.taintalyzer.main.TaintAnalyzer</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>

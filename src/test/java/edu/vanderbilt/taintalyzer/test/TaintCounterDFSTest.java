@@ -20,16 +20,16 @@ import edu.vanderbilt.taintalyzer.test.sample.Foo.MyStruct_ref_array2D;
 import edu.vanderbilt.taintalyzer.utility.TaintCounterDFS;
 
 public class TaintCounterDFSTest {
-	
+
 	public Taint<String> t = new Taint<String>("tainted_recursively");
 	HashMap<Integer, Integer> expectedResult;
-	
-	
+
+
 	@Before
 	public void setUp() throws Exception {
 		expectedResult = new HashMap<Integer, Integer>();
 	}
-	
+
 	@Test
 	public void CheckPrimitive() throws Exception
 	{
@@ -41,7 +41,7 @@ public class TaintCounterDFSTest {
 		expectedResult.put(0,  1);
 		assertEquals(expectedResult, o.getdata());
 	}
-	
+
 	@Test
 	public void CheckPrimitiveArray() throws Exception
 	{
@@ -54,7 +54,7 @@ public class TaintCounterDFSTest {
 		expectedResult.put(0,  4);
 		assertEquals(expectedResult, o.getdata());
 	}
-	
+
 	@Test
 	public void CheckPrimitiveArrayNull() throws Exception
 	{
@@ -66,8 +66,8 @@ public class TaintCounterDFSTest {
 		assertEquals(0, o.checkStacklevl());
 		assertEquals(expectedResult, o.getdata());
 	}
-	
-	
+
+
 	@Test
 	public void CheckPrimitiveArray2D() throws Exception
 	{
@@ -80,7 +80,7 @@ public class TaintCounterDFSTest {
 		assertEquals(0, o.checkStacklevl());
 		assertEquals(expectedResult, o.getdata());
 	}
-	
+
 	@Test
 	public void CheckObjectWithPrimitive() throws Exception
 	{
@@ -93,9 +93,9 @@ public class TaintCounterDFSTest {
 		expectedResult.put(0, 1);
 		expectedResult.put(1, 8);
 		assertEquals(expectedResult, o.getdata());
-		
+
 	}
-	
+
 	@Test
 	public void CheckObjectWithPrimitiveArray() throws Exception
 	{
@@ -109,9 +109,9 @@ public class TaintCounterDFSTest {
 		expectedResult.put(0, 1);
 		expectedResult.put(1, 25);
 		assertEquals(expectedResult, o.getdata());
-		
+
 	}
-	
+
 	@Test
 	public void CheckObjectWithPrimitiveArray2D() throws Exception
 	{
@@ -123,9 +123,9 @@ public class TaintCounterDFSTest {
 		assertEquals(0, o.checkStacklevl());
 		expectedResult.put(0, 1);
 		expectedResult.put(1, 16);
-		assertEquals(expectedResult, o.getdata());	
+		assertEquals(expectedResult, o.getdata());
 	}
-	
+
 	@Test
 	public void CheckMyStruct_ref() throws Exception
 	{
@@ -140,7 +140,7 @@ public class TaintCounterDFSTest {
 		expectedResult.put(2, 33);
 		assertEquals(expectedResult, o.getdata());
 	}
-	
+
 	@Test
 	public void CheckMyStruct_ref2D() throws Exception
 	{
@@ -155,7 +155,7 @@ public class TaintCounterDFSTest {
 		expectedResult.put(2, 24);
 		assertEquals(expectedResult, o.getdata());
 	}
-	
+
 	@Test
 	public void CheckMyStruct_ref_array() throws Exception
 	{
@@ -171,7 +171,7 @@ public class TaintCounterDFSTest {
 		expectedResult.put(3, 66);
 		assertEquals(expectedResult, o.getdata());
 	}
-	
+
 	@Test
 	public void CheckMyStruct_ref_array2D() throws Exception
 	{
