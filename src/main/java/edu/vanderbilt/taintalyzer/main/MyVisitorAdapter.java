@@ -109,11 +109,11 @@ public class MyVisitorAdapter<A> implements VoidVisitor<A> {
 	private final String Path;
 	private static HashSet<String> All_vars;
 
-	public MyVisitorAdapter(CompilationUnit cu, String Path) {
+	public MyVisitorAdapter(CompilationUnit cu) {
 		// TODO Auto-generated constructor stub
 		this.loop_counter.push(0);
 		this.parent_loop_label.push("");
-		this.Path = Path;
+		this.Path = TaintAnalyzer.CG_JSON;
 		MyVisitorAdapter.All_vars = new HashSet<String>();
 		cu.accept(new VariableCollector(), MyVisitorAdapter.All_vars);
 		this.visitDepthFirst(cu);
