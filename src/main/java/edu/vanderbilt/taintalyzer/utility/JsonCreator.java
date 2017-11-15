@@ -17,9 +17,16 @@ public class JsonCreator {
 	private JsonCreator() {
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public static void remove_json(String Path)
+	{
+		File jsonFile = new File(Path + File.separator + "output.json");
+		if (jsonFile.exists()){
+			jsonFile.delete();
+		}
+	}
+	
 	public static void append_json(String Path, TaintEntry T) {
-
 		set.add(T);
 		if (set.size() > set_size) {
 			set_size = set.size();
@@ -37,7 +44,6 @@ public class JsonCreator {
 					file.close();
 
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else {
@@ -48,7 +54,6 @@ public class JsonCreator {
 					file.close();
 
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
