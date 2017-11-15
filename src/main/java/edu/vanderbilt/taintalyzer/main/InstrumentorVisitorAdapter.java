@@ -3,6 +3,7 @@ package edu.vanderbilt.taintalyzer.main;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Stack;
 
 import com.github.javaparser.ast.ArrayCreationLevel;
@@ -101,24 +102,29 @@ import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-public class MyVisitorAdapter<A> implements VoidVisitor<A> {
+public class InstrumentorVisitorAdapter<A> implements VoidVisitor<A> {
 
 	private String Current_method_name;
+	private final CompilationUnit cu;
 	private Stack<String> parent_loop_label = new Stack<String>();
 	private Stack<Integer> loop_counter = new Stack<Integer>();
 	private final String Path;
-	private static HashSet<String> All_vars;
+	private static HashSet<String> All_vars = new HashSet<String>();
 
-	public MyVisitorAdapter(CompilationUnit cu) {
+	public InstrumentorVisitorAdapter(CompilationUnit cu, String Path) {
 		// TODO Auto-generated constructor stub
 		this.loop_counter.push(0);
 		this.parent_loop_label.push("");
-		this.Path = TaintAnalyzer.CG_JSON;
-		MyVisitorAdapter.All_vars = new HashSet<String>();
-		cu.accept(new VariableCollector(), MyVisitorAdapter.All_vars);
+		this.Path = Path;
+		this.cu = cu;
+		cu.accept(new VariableCollector(), InstrumentorVisitorAdapter.All_vars);
+	}
+	
+	public void startInstrumenting()
+	{
 		this.visitDepthFirst(cu);
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void visit(NodeList n, A arg) {
@@ -318,7 +324,7 @@ public class MyVisitorAdapter<A> implements VoidVisitor<A> {
 			while_condition.accept(new WhileConditionAdapter(), variables);
 
 		for (String var : variables) {
-			if (MyVisitorAdapter.All_vars.contains(var))
+			if (InstrumentorVisitorAdapter.All_vars.contains(var))
 				createIfStatement((BlockStmt) n.getBody(), var, pn);
 		}
 
@@ -567,7 +573,14 @@ public class MyVisitorAdapter<A> implements VoidVisitor<A> {
 		this.Current_method_name = n.getNameAsString();
 		this.loop_counter.push(0);
 		this.parent_loop_label.push(this.Current_method_name);
-
+		
+		if (this.Current_method_name.equals("main")){
+			String S1 = new String("JsonCreator.remove_json(\"" + this.Path +"\" )");
+			Optional<BlockStmt> methodbody = n.getBody();
+			if (methodbody.isPresent()){
+				methodbody.get().addStatement(0, new NameExpr(S1));
+			}
+		}
 	}
 
 	@Override
@@ -789,7 +802,7 @@ public class MyVisitorAdapter<A> implements VoidVisitor<A> {
 			while_condition.accept(new WhileConditionAdapter(), variables);
 
 		for (String var : variables) {
-			if (MyVisitorAdapter.All_vars.contains(var))
+			if (InstrumentorVisitorAdapter.All_vars.contains(var))
 				createIfStatement((BlockStmt) n.getBody(), var, pn);
 		}
 
