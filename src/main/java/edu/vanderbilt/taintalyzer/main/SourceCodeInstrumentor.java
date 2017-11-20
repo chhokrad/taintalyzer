@@ -11,6 +11,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.google.common.io.Files;
 
 import edu.columbia.cs.psl.phosphor.runtime.MultiTainter;
 import edu.columbia.cs.psl.phosphor.runtime.Taint;
@@ -29,7 +30,10 @@ public class SourceCodeInstrumentor {
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr)
 				throws FileNotFoundException {
-			if (attr.isRegularFile()) {
+			System.out.println(file);
+			System.out.println(Files.getFileExtension(file.toString()) );
+			if (attr.isRegularFile() && Files.getFileExtension(file.toString()).compareTo("java")==0) {
+				System.out.println("****");
 				String Instrumented_Code = addInstrumentation(new FileInputStream(
 						file.toFile()));
 				PrintWriter pw = new PrintWriter(file.toFile());

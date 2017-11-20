@@ -395,6 +395,7 @@ public class InstrumentorVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override
 	public void visit(ForStmt n, A arg) {
+		System.out.println(n);
 		Integer lc = this.loop_counter.peek() + 1;
 		String pn = new String(this.parent_loop_label.peek() + "_L" + lc);
 		this.loop_counter.pop();
@@ -408,13 +409,20 @@ public class InstrumentorVisitorAdapter<A> implements VoidVisitor<A> {
 
 		ArrayList<String> variable_names = new ArrayList<>();
 		Iterator<Expression> it = n.getInitialization().iterator();
+		
 		while (it.hasNext()) {
-			Iterator<VariableDeclarator> it_1 = ((VariableDeclarationExpr) it.next()).getVariables().iterator();
+			Expression temp = it.next();
+			if (temp instanceof VariableDeclarationExpr){
+				System.out.println("####");
+				Iterator<VariableDeclarator> it_1 = ((VariableDeclarationExpr) temp).getVariables().iterator();
 			while (it_1.hasNext())
 				variable_names.add(it_1.next().getNameAsString());
+			}
+			else if (temp instanceof AssignExpr){
+				// TODO
+			}
 		}
 		for (String var : variable_names) {
-
 			createIfStatement((BlockStmt) n.getBody(), var, pn);
 		}
 

@@ -52,6 +52,20 @@ public class PomGenerator {
 
 		Build build = new Build();
 		Plugin plugin = new Plugin();
+		Plugin plugin_comp = new Plugin();
+		
+		Xpp3Dom source = new Xpp3Dom("source");
+		source.setValue("1.8");
+		
+		Xpp3Dom target = new Xpp3Dom("target");
+		target.setValue("1.8");
+		
+		Xpp3Dom configuration_comp = new Xpp3Dom("configuration");
+		configuration_comp.addChild(source);
+		configuration_comp.addChild(target);
+		plugin_comp.setConfiguration(configuration_comp);
+		plugin_comp.setVersion("3.7.0");
+		plugin_comp.setArtifactId("maven-compiler-plugin");
 
 		Xpp3Dom mainClass = new Xpp3Dom("mainClass");
 		mainClass.setValue(OptionMap.get(TaintAnalyzer.APP_ENTRY));
@@ -77,12 +91,17 @@ public class PomGenerator {
 		pluginexecution.setPhase("package");
 		pluginexecution.addGoal("single");
 		pluginexecution.setConfiguration(configuration);
-
+		
+		
+		
 		plugin.addExecution(pluginexecution);
 		plugin.setArtifactId("maven-assembly-plugin");
 		plugin.setGroupId("org.apache.maven.plugins");
+		
+		
 
 		build.addPlugin(plugin);
+		build.addPlugin(plugin_comp);
 		model.setBuild(build);
 
 		new MavenXpp3Writer().write(
