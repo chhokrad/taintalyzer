@@ -56,7 +56,8 @@ public class RecursiveMultiTainterBFS {
 
 	private void taintObjectsfiltered(LevelObjPair p_)
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
-		myQueue.add(p_);
+		if (p_.getObj() != null) 
+			myQueue.add(p_);
 		while (!this.myQueue.isEmpty()) {
 			LevelObjPair p = this.myQueue.poll();
 			if (p.getLevel() <= this.MAX_LEVEL && this.CurrTaints < this.MAX_TAINTS) {

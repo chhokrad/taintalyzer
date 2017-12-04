@@ -21,7 +21,6 @@ public class ZipFileProcessor {
 			if (!entry.isDirectory()) {
 				File temp = new File(dirPaths.get(TaintAnalyzer.CG_SRC)
 						+ File.separator + entry.getName());
-				System.out.println(temp.getPath());
 				if (!temp.getParentFile().exists())
 					temp.getParentFile().mkdirs();
 				Files.copy(zipFile.getInputStream(entry), temp.toPath(),

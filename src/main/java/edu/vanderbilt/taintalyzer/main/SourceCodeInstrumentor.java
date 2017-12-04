@@ -30,10 +30,7 @@ public class SourceCodeInstrumentor {
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr)
 				throws FileNotFoundException {
-			System.out.println(file);
-			System.out.println(Files.getFileExtension(file.toString()) );
 			if (attr.isRegularFile() && Files.getFileExtension(file.toString()).compareTo("java")==0) {
-				System.out.println("****");
 				String Instrumented_Code = addInstrumentation(new FileInputStream(
 						file.toFile()));
 				PrintWriter pw = new PrintWriter(file.toFile());

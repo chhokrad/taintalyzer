@@ -318,7 +318,7 @@ public class InstrumentorVisitorAdapter<A> implements VoidVisitor<A> {
 		Expression while_condition = n.getCondition();
 
 		if (while_condition instanceof BooleanLiteralExpr)
-			System.out.println(while_condition.toString());
+			System.out.println("skipping while condition in " + pn + " due to boolean literal");
 		// TODO Not sure what to do here
 		else
 			while_condition.accept(new WhileConditionAdapter(), variables);
@@ -395,7 +395,6 @@ public class InstrumentorVisitorAdapter<A> implements VoidVisitor<A> {
 
 	@Override
 	public void visit(ForStmt n, A arg) {
-		System.out.println(n);
 		Integer lc = this.loop_counter.peek() + 1;
 		String pn = new String(this.parent_loop_label.peek() + "_L" + lc);
 		this.loop_counter.pop();
@@ -413,7 +412,6 @@ public class InstrumentorVisitorAdapter<A> implements VoidVisitor<A> {
 		while (it.hasNext()) {
 			Expression temp = it.next();
 			if (temp instanceof VariableDeclarationExpr){
-				System.out.println("####");
 				Iterator<VariableDeclarator> it_1 = ((VariableDeclarationExpr) temp).getVariables().iterator();
 			while (it_1.hasNext())
 				variable_names.add(it_1.next().getNameAsString());
@@ -804,7 +802,7 @@ public class InstrumentorVisitorAdapter<A> implements VoidVisitor<A> {
 		Expression while_condition = n.getCondition();
 
 		if (while_condition instanceof BooleanLiteralExpr)
-			System.out.println(while_condition.toString());
+			System.out.println("skipping while condition in " + pn + " due to boolean literal");
 		// TODO: Not sure what to do in this case
 		else
 			while_condition.accept(new WhileConditionAdapter(), variables);

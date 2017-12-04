@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.HashMap;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +40,8 @@ public class RecursiveMultiTainterBFSTest {
 	public void setUp() throws Exception {
 		o = new TaintCounterDFS();
 	}
-
+	
+	
 	@Test
 	public void PrimitiveArraysTaintedRecursive()
 			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
@@ -839,4 +842,14 @@ public class RecursiveMultiTainterBFSTest {
 
 		assertEquals(R.getData().getresults(), o.getdata());
 	}
+	
+	@Test
+	public void HashMapTest()
+			throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
+		HashMap<String, String> m = new HashMap<String, String>();
+		R.taintObjects(m, t, 0, Integer.MAX_VALUE);
+		
+		System.out.println(R.getData().getresults());
+	}
+	
 }

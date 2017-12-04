@@ -21,7 +21,6 @@ import org.apache.commons.io.FileUtils;
 
 import edu.vanderbilt.taintalyzer.main.SourceCodeInstrumentor.addInstrumentations;
 
-
 public class TaintAnalyzer {
 
 	final static String APP_SOURCE = "application-source-zipped";
@@ -44,19 +43,27 @@ public class TaintAnalyzer {
 
 		Map<String, String> OptionsMap = parseOptionstoMap(args);
 		Map<String, File> dirPathsMap = createDirs(OptionsMap.get(APP_SOURCE));
-		
+
 		ZipFileProcessor.extract(dirPathsMap, OptionsMap);
 		copyFiles(dirPathsMap);
-		
+
 		addInstrumentations instrumentor = new addInstrumentations();
 		instrumentor.setOutputPath(dirPathsMap.get(CG_JSON).toString());
-		
-		Files.walkFileTree(dirPathsMap.get(CG_SRC_INST_SMJ)
-				.toPath(), instrumentor);
+
+		Files.walkFileTree(dirPathsMap.get(CG_SRC_INST_SMJ).toPath(),
+				instrumentor);
 		PomGenerator.createPOM(dirPathsMap, OptionsMap);
 	}
 
 	private static Map<String, String> parseOptionstoMap(String[] args) {
+
+		Path taintPath = null;
+
+		if (System.getenv("TAINT_HOME").isEmpty())
+			System.exit(-1);
+		else
+			taintPath = Paths.get(System.getenv("TAINT_HOME"), "target",
+					"taintalyzer-0.0.1-SNAPSHOT-jar-with-dependencies.jar");
 
 		Options options = new Options();
 
@@ -95,10 +102,14 @@ public class TaintAnalyzer {
 		String sourceOption = cmd.getOptionValue(APP_SOURCE);
 		String entryOption = cmd.getOptionValue(APP_ENTRY);
 		String nameOption = cmd.getOptionValue(APP_NAME);
-		String dependencyOption = new String();
+		String dependencyOption = new String(taintPath.toString()
+				+ File.pathSeparatorChar);
 		if (cmd.getOptionValues(APP_DEP) != null)
-			dependencyOption = cmd.getOptionValue(APP_DEP);
-
+			dependencyOption = dependencyOption.concat(cmd
+					.getOptionValue(APP_DEP));
+		else
+			dependencyOption = dependencyOption.substring(0,
+					dependencyOption.length() - 1);
 		HashMap<String, String> OptionMap = new HashMap<String, String>();
 		OptionMap.put(APP_SOURCE, sourceOption);
 		OptionMap.put(APP_ENTRY, entryOption);
@@ -108,16 +119,15 @@ public class TaintAnalyzer {
 		return Collections.unmodifiableMap(OptionMap);
 	}
 
-	
 	private static Map<String, File> createDirs(String zipFilePath)
 			throws Exception {
 		HashMap<String, File> paths = new HashMap<>();
 		String[] dirs = { CG_SRC, CG_SRC_INST, CG_JSON };
-		String[] sub_dirs = {CG_SRC_INST_SMJ, CG_SRC_INST_STJ, CG_SRC_INST_SMR};
+		String[] sub_dirs = { CG_SRC_INST_SMJ, CG_SRC_INST_STJ, CG_SRC_INST_SMR };
 		Path cgRoot = Paths.get(zipFilePath).toAbsolutePath().getParent()
 				.resolve(CG_ROOT);
 		Path appRoot = cgRoot.resolve(CG_SRC_INST);
-		
+
 		if (Files.exists(cgRoot))
 			FileUtils.deleteDirectory(cgRoot.toFile());
 		Arrays.stream(dirs).forEach(dir -> {
@@ -128,19 +138,19 @@ public class TaintAnalyzer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			});
-			
-			Arrays.stream(sub_dirs).forEach(sub_dir -> {
-				try {
-					File f = appRoot.resolve(sub_dir).toFile();
-					FileUtils.forceMkdir(f);
-					paths.put(sub_dir, f);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 		});
-			return Collections.unmodifiableMap(paths);
-		
+
+		Arrays.stream(sub_dirs).forEach(sub_dir -> {
+			try {
+				File f = appRoot.resolve(sub_dir).toFile();
+				FileUtils.forceMkdir(f);
+				paths.put(sub_dir, f);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		return Collections.unmodifiableMap(paths);
+
 	}
 
 	private static void copyFiles(Map<String, File> dirPaths)
