@@ -1,9 +1,9 @@
 language: java
 sudo: false
 jdk: oraclejdk8
+script: mvn verify
 before_install:
 - openssl aes-256-cbc -K $encrypted_a338f78a5bde_key -iv $encrypted_a338f78a5bde_iv
   -in codesigning.asc.enc -out codesigning.asc -d
 - gpg --fast-import codesigning.asc
-script: mvn verify
-after_success: mvn install
+after_success: true
