@@ -10,7 +10,8 @@ target=$TAINT_HOME/phosphor/Phosphor/target
 create_phosphor_jar() {
   echo "Creating Phosphor for $1"
   cd phosphor/Phosphor
-  mvn clean install
+  echo "echo \"We skip phosphor's own tests\"" > instrumentJRE.sh
+  mvn clean install -DskipTests -DskipITs
   cd ../..
   git submodule status > $target/phosphor_hash.txt
 }

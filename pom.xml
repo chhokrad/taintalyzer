@@ -20,8 +20,11 @@
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>${basedir}/src/test/sources/instrumentJRE.sh</executable>
+							<executable>${basedir}/src/main/instrumentJRE.sh</executable>
 							<workingDirectory>${basedir}</workingDirectory>
+							<environmentVariables>
+								<TAINT_HOME>${basedir}</TAINT_HOME>
+							</environmentVariables>
 						</configuration>
 					</execution>
 					<execution>
@@ -33,6 +36,9 @@
 						<configuration>
 							<executable>${basedir}/src/test/resources/Category01Vulnerable/start_instrumentation.sh</executable>
 							<workingDirectory>${basedir}/src/test/resources/Category01Vulnerable/</workingDirectory>
+							<environmentVariables>
+								<TAINT_HOME>${basedir}</TAINT_HOME>
+							</environmentVariables>
 						</configuration>
 					</execution>
 					<execution>
@@ -44,6 +50,9 @@
 						<configuration>
 							<executable>${basedir}/src/test/resources/Category04Vulnerable/start_instrumentation.sh</executable>
 							<workingDirectory>${basedir}/src/test/resources/Category04Vulnerable/</workingDirectory>
+							<environmentVariables>
+								<TAINT_HOME>${basedir}</TAINT_HOME>
+							</environmentVariables>
 						</configuration>
 					</execution>
 				</executions>
@@ -61,7 +70,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.20.1</version>
 				<configuration>
-					<jvm>${basedir}/phosphor/Phosphor/target/jre-inst-obj/bin/java</jvm>
+					<jvm>${basedir}/phosphor/Phosphor/target/jre-inst-ctrl-multi/bin/java</jvm>
 					<argLine>-Xbootclasspath/p:${basedir}/phosphor/Phosphor/target/Phosphor-0.0.4-SNAPSHOT.jar
 						-javaagent:${basedir}/phosphor/Phosphor/target/Phosphor-0.0.4-SNAPSHOT.jar</argLine>
 				</configuration>
