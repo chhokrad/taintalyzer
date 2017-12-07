@@ -4,7 +4,7 @@ fileName=$(find *.java)
 mkdir -p src/e1e4
 cp $fileName src/e1e4
 zip -r Archive.zip src
-APP_SOURCE=$(greadlink -f Archive.zip)
+APP_SOURCE=$(pwd)/Archive.zip
 IFS='.'
 read -r var1 var2 <<< "$fileName"
 APP_ENTRY="e1e4.${var1}"
