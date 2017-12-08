@@ -152,6 +152,7 @@
 			<groupId>edu.gmu.swe.phosphor</groupId>
 			<artifactId>Phosphor</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
