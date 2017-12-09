@@ -1,4 +1,4 @@
-# Taintalyzer
+# Taintalyzer [![Build Status](https://travis-ci.org/chhokrad/taintalyzer.svg?branch=master)](https://travis-ci.org/chhokrad/taintalyzer)
 
 This project aims at finding data flow dependencies between user defined taint sources and loop variables in java byte code using Phosphor.
 
